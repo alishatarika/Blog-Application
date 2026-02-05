@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Post | MyBlog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #f1f5f9;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ===== HEADER ===== */
+        header {
+            background: rgba(30, 41, 59, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px 0;
+        }
+        .header-content { max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 24px; font-weight: 700; color: #3b82f6; text-decoration: none; }
+        nav { display: flex; gap: 25px; }
+        nav a { color: rgba(241, 245, 249, 0.7); text-decoration: none; font-weight: 500; transition: all 0.3s; }
+        nav a:hover { color: #3b82f6; }
+
+        /* ===== MAIN CONTENT ===== */
+        main { flex: 1; display: flex; justify-content: center; align-items: center; padding: 40px 20px; }
+        .container {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            width: 100%;
+            max-width: 700px;
+            padding: 40px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        h1 { text-align: center; margin-bottom: 10px; font-size: 32px; }
+        .subtitle { text-align: center; color: rgba(241, 245, 249, 0.6); margin-bottom: 30px; font-size: 14px; }
+        label { display: block; margin-top: 20px; margin-bottom: 8px; font-weight: 600; font-size: 14px; }
+        input[type="text"], textarea {
+            width: 100%; padding: 12px 15px; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05); color: #f1f5f9; font-size: 14px; font-family: 'Poppins', sans-serif;
+        }
+        input::placeholder, textarea::placeholder { color: rgba(241, 245, 249, 0.3); }
+        input:focus, textarea:focus { outline: none; border-color: #3b82f6; background: rgba(59, 130, 246, 0.05); }
+        textarea { min-height: 200px; resize: vertical; }
+
+        /* ===== IMAGE UPLOAD ===== */
+        .image-upload-section { margin-top: 20px; }
+        .image-upload-area {
+            border: 3px dashed rgba(59, 130, 246, 0.5);
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: rgba(59, 130, 246, 0.05);
+        }
+        .image-upload-area:hover {
+            background: rgba(59, 130, 246, 0.1);
+            border-color: #3b82f6;
+        }
+        .image-upload-area.dragover {
+            background: rgba(59, 130, 246, 0.15);
+            border-color: #3b82f6;
+            transform: scale(1.02);
+        }
+        .upload-icon { font-size: 48px; margin-bottom: 10px; }
+        .upload-text { color: rgba(241, 245, 249, 0.8); font-size: 14px; }
+        .upload-hint { color: rgba(241, 245, 249, 0.5); font-size: 12px; margin-top: 5px; }
+        input[type="file"] { display: none; }
+
+        /* ===== IMAGE PREVIEW ===== */
+        .image-preview {
+            margin-top: 20px;
+            display: none;
+            position: relative;
+        }
+        .image-preview.active { display: block; }
+        .preview-container {
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+            max-width: 100%;
+        }
+        .preview-container img {
+            width: 100%;
+            max-height: 300px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+        .remove-image-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ef4444;
+            color: white;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        .remove-image-btn:hover {
+            background: #dc2626;
+            transform: scale(1.1);
+        }
+
+        .btn {
+            width: 100%; margin-top: 30px; padding: 14px; border: none; border-radius: 10px;
+            background: linear-gradient(135deg, #3b82f6, #a855f7); color: white; font-size: 16px; font-weight: 700;
+            cursor: pointer; transition: all 0.3s;
+        }
+        .btn:hover { opacity: 0.9; transform: translateY(-2px); }
+
+        /* ===== FOOTER ===== */
+        footer { background: rgba(30, 41, 59, 0.9); border-top: 1px solid rgba(255, 255, 255, 0.1);
+                 text-align: center; padding: 25px 20px; color: rgba(241, 245, 249, 0.6); font-size: 14px; }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .header-content { flex-direction: column; gap: 15px; }
+            .container { padding: 30px 25px; }
+            h1 { font-size: 28px; }
+        }
+
+        /* ===== TOAST ===== */
+        #toast {
+            visibility: hidden; min-width: 250px; background-color: #333; color: #fff;
+            text-align: center; padding: 14px 20px; border-radius: 8px; position: fixed;
+            bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 1000;
+            font-family: 'Poppins', sans-serif; font-size: 14px; opacity: 0;
+            transition: opacity 0.5s, bottom 0.5s;
+        }
+        #toast.show { visibility: visible; opacity: 1; bottom: 50px; }
+    </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+    <div class="header-content">
+        <a href="/" class="logo">MyBlog</a>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/read">Posts</a>
+            <a href="/logout">Logout</a>
+        </nav>
+    </div>
+</header>
+
+<!-- MAIN CONTENT -->
+<main>
+    <div class="container">
+        <h1>✍️ Create New Post</h1>
+        <p class="subtitle">Share your story with the world</p>
+        <form method="post" action="/create-post" enctype="multipart/form-data" id="postForm">
+            <label for="title">Post Title</label>
+            <input type="text" name="title" id="title" maxlength="100" placeholder="Enter your post title" required>
+            
+            <label for="content">Post Content</label>
+            <textarea name="content" id="content" placeholder="Write your content here..." required></textarea>
+            
+            <!-- IMAGE UPLOAD SECTION -->
+            <div class="image-upload-section">
+                <label>Featured Image (Optional)</label>
+                <div class="image-upload-area" id="uploadArea">
+                    <div class="upload-icon">📷</div>
+                    <p class="upload-text">Add image</p>
+                    <p class="upload-hint">PNG, JPG, GIF, WEBP up to 5MB</p>
+                </div>
+                <input type="file" name="image" id="imageInput" accept="image/jpeg,image/png,image/gif,image/webp">
+                
+                <div class="image-preview" id="imagePreview">
+                    <div class="preview-container">
+                        <img id="previewImg" src="" alt="Preview">
+                        <button type="button" class="remove-image-btn" id="removeImageBtn">×</button>
+                    </div>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn">🚀 Publish Post</button>
+        </form>
+    </div>
+</main>
+
+<footer>
+    <p>© 2026 MyBlog. All rights reserved.</p>
+</footer>
+
+<div id="toast">Post published successfully! ✅</div>
+
+<script>
+    // DOM Elements
+    const form = document.getElementById('postForm');
+    const uploadArea = document.getElementById('uploadArea');
+    const imageInput = document.getElementById('imageInput');
+    const imagePreview = document.getElementById('imagePreview');
+    const previewImg = document.getElementById('previewImg');
+    const removeImageBtn = document.getElementById('removeImageBtn');
+    const toast = document.getElementById('toast');
+
+    // Click to upload
+    uploadArea.addEventListener('click', () => {
+        imageInput.click();
+    });
+
+    // Handle file selection
+    imageInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            handleImageFile(file);
+        }
+    });
+
+    // Drag and drop handlers
+    uploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadArea.classList.add('dragover');
+    });
+
+    uploadArea.addEventListener('dragleave', () => {
+        uploadArea.classList.remove('dragover');
+    });
+
+    uploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove('dragover');
+        
+        const files = e.dataTransfer.files;
+        if (files.length > 0 && files[0].type.startsWith('image/')) {
+            // Set the file to the input
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(files[0]);
+            imageInput.files = dataTransfer.files;
+            
+            handleImageFile(files[0]);
+        }
+    });
+
+    // Handle image file
+    function handleImageFile(file) {
+        // Validate file size (5MB)
+        if (file.size > 5 * 1024 * 1024) {
+            alert('Image size should be less than 5MB');
+            imageInput.value = '';
+            return;
+        }
+
+        // Validate file type
+        if (!file.type.startsWith('image/')) {
+            alert('Please select an image file');
+            imageInput.value = '';
+            return;
+        }
+
+        // Preview image
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            previewImg.src = e.target.result;
+            imagePreview.classList.add('active');
+            uploadArea.style.display = 'none';
+        };
+        reader.readAsDataURL(file);
+    }
+
+    // Remove image
+    removeImageBtn.addEventListener('click', () => {
+        imageInput.value = '';
+        imagePreview.classList.remove('active');
+        uploadArea.style.display = 'block';
+    });
+
+    // Form submission
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        toast.classList.add('show');
+
+        setTimeout(() => {
+            form.submit();
+        }, 500);
+    });
+</script>
+
+</body>
+</html>

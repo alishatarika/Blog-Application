@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login | MyBlog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #f1f5f9;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ===== HEADER ===== */
+        header {
+            background: rgba(30, 41, 59, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px 0;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #3b82f6;
+            text-decoration: none;
+        }
+
+        nav {
+            display: flex;
+            gap: 25px;
+        }
+
+        nav a {
+            color: rgba(241, 245, 249, 0.7);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        nav a:hover {
+            color: #3b82f6;
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        main {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .login-box {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            width: 400px;
+            max-width: 100%;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: rgba(241, 245, 249, 0.6);
+            text-decoration: none;
+            font-size: 14px;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+
+        .back-link:hover {
+            color: #3b82f6;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 28px;
+            color: #f1f5f9;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: rgba(241, 245, 249, 0.8);
+            margin-bottom: 8px;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        input[type="email"] {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            font-size: 14px;
+            color: #f1f5f9;
+            transition: all 0.3s;
+        }
+
+        input::placeholder {
+            color: rgba(241, 245, 249, 0.3);
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.05);
+        }
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .toggle-label {
+            position: absolute;
+            right: 15px;
+            top: 38px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            color: #3b82f6;
+            user-select: none;
+        }
+
+        .error-message {
+            color: #ef4444;
+            font-size: 12px;
+            margin-top: 5px;
+            min-height: 18px;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            border-radius: 10px;
+            border: none;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            color: white;
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .signup-link {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 14px;
+            color: rgba(241, 245, 249, 0.7);
+        }
+
+        .signup-link a {
+            color: #ec4899;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .signup-link a:hover {
+            color: #a855f7;
+        }
+
+        .server-error {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #ef4444;
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background: rgba(30, 41, 59, 0.9);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            padding: 25px 20px;
+            color: rgba(241, 245, 249, 0.6);
+            font-size: 14px;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .login-box {
+                padding: 30px 25px;
+            }
+
+            h2 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+    <div class="header-content">
+        <a href="/" class="logo">MyBlog</a>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/read">Posts</a>
+        </nav>
+    </div>
+</header>
+
+<!-- MAIN CONTENT -->
+<main>
+    <div class="login-box">
+        <a href="/" class="back-link">← Back to Home</a>
+        
+        <h2>Please Login</h2>
+
+        <form id="loginForm" method="POST" action="/login" novalidate>
+            <div class="form-group">
+                <label for="identifier">Username or Email</label>
+                <input type="text" name="identifier" id="identifier" placeholder="Enter your username or email">
+                <div class="error-message" id="identifierError"></div>
+            </div>
+
+            <div class="form-group password-wrapper">
+                <label for="password">Password</label>
+                <input type="password" name="password" id="password" placeholder="Enter your password">
+                <span class="toggle-label" onclick="togglePassword()">Show</span>
+                <div class="error-message" id="passwordError"></div>
+            </div>
+
+            <button type="submit">Log In</button>
+        </form>
+
+        <div class="signup-link">
+            Don't have an account? <a href="/register">Create one</a>
+        </div>
+
+        {% if error %}
+        <div class="server-error">{{ error }}</div>
+        {% endif %}
+    </div>
+</main>
+
+<!-- FOOTER -->
+<footer>
+    <p>© 2026 MyBlog. All rights reserved.</p>
+</footer>
+
+<script>
+function togglePassword() {
+    const pass = document.getElementById("password");
+    const toggle = document.querySelector(".toggle-label");
+
+    if (pass.type === "password") {
+        pass.type = "text";
+        toggle.textContent = "Hide";
+    } else {
+        pass.type = "password";
+        toggle.textContent = "Show";
+    }
+}
+
+const loginForm = document.getElementById("loginForm");
+const identifier = document.getElementById("identifier");
+const password = document.getElementById("password");
+const identifierError = document.getElementById("identifierError");
+const passwordError = document.getElementById("passwordError");
+
+function validateIdentifier() {
+    if (identifier.value.trim() === "") {
+        identifierError.textContent = "Username or Email is required.";
+        return false;
+    } else {
+        identifierError.textContent = "";
+        return true;
+    }
+}
+
+function validatePassword() {
+    const passVal = password.value.trim();
+    if (passVal === "") {
+        passwordError.textContent = "Password is required.";
+        return false;
+    } else if (passVal.length < 6) {
+        passwordError.textContent = "Password must be at least 6 characters.";
+        return false;
+    } else {
+        passwordError.textContent = "";
+        return true;
+    }
+}
+
+identifier.addEventListener("input", validateIdentifier);
+password.addEventListener("input", validatePassword);
+
+loginForm.addEventListener("submit", function(e) {
+    const validIdentifier = validateIdentifier();
+    const validPassword = validatePassword();
+
+    if (!validIdentifier || !validPassword) {
+        e.preventDefault(); 
+    }
+});
+
+<!-- Add this inside <body>, just before </body> -->
+<!-- TOAST -->
+<div id="toast">Login successful! ✅</div>
+
+<style>
+  #toast {
+    visibility: hidden;
+    min-width: 250px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 14px 20px;
+    border-radius: 8px;
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    opacity: 0;
+    transition: opacity 0.5s, bottom 0.5s;
+  }
+  #toast.show {
+    visibility: visible;
+    opacity: 1;
+    bottom: 50px;
+  }
+</style>
+
+<script>
+  const loginForm = document.getElementById("loginForm");
+  const identifier = document.getElementById("identifier");
+  const password = document.getElementById("password");
+  const identifierError = document.getElementById("identifierError");
+  const passwordError = document.getElementById("passwordError");
+  const toast = document.getElementById("toast");
+
+  function togglePassword() {
+      const pass = document.getElementById("password");
+      const toggle = document.querySelector(".toggle-label");
+
+      if (pass.type === "password") {
+          pass.type = "text";
+          toggle.textContent = "Hide";
+      } else {
+          pass.type = "password";
+          toggle.textContent = "Show";
+      }
+  }
+
+  function validateIdentifier() {
+      if (identifier.value.trim() === "") {
+          identifierError.textContent = "Username or Email is required.";
+          return false;
+      } else {
+          identifierError.textContent = "";
+          return true;
+      }
+  }
+
+  function validatePassword() {
+      const passVal = password.value.trim();
+      if (passVal === "") {
+          passwordError.textContent = "Password is required.";
+          return false;
+      } else if (passVal.length < 6) {
+          passwordError.textContent = "Password must be at least 6 characters.";
+          return false;
+      } else {
+          passwordError.textContent = "";
+          return true;
+      }
+  }
+
+  identifier.addEventListener("input", validateIdentifier);
+  password.addEventListener("input", validatePassword);
+
+  loginForm.addEventListener("submit", function(e) {
+      const validIdentifier = validateIdentifier();
+      const validPassword = validatePassword();
+
+      if (!validIdentifier || !validPassword) {
+          e.preventDefault(); 
+          return;
+      }
+
+      e.preventDefault(); 
+      toast.textContent = "Logging in... ✅";
+      toast.classList.add("show");
+
+      setTimeout(() => {
+          loginForm.submit(); 
+      }, 500);
+  });
+</script>
+
+</script>
+
+</body>
+</html>

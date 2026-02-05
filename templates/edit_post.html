@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Post | MyBlog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #f1f5f9;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ===== HEADER ===== */
+        header {
+            background: rgba(30, 41, 59, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px 0;
+        }
+        .header-content { max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 24px; font-weight: 700; color: #3b82f6; text-decoration: none; }
+        .back-link { color: #3b82f6; text-decoration: none; font-weight: 500; transition: all 0.3s; }
+        .back-link:hover { color: #2563eb; }
+
+        /* ===== MAIN CONTENT ===== */
+        main { flex: 1; display: flex; justify-content: center; align-items: center; padding: 40px 20px; }
+        .edit-box {
+            background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1); padding: 40px; border-radius: 15px; width: 100%; max-width: 700px;
+        }
+        h2 { text-align: center; margin-bottom: 30px; font-size: 28px; }
+        .form-group { margin-bottom: 25px; }
+        label { display: block; margin-bottom: 10px; font-weight: 600; font-size: 14px; }
+        input[type="text"], textarea {
+            width: 100%; padding: 12px 15px; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05); color: #f1f5f9; font-size: 14px; font-family: 'Poppins', sans-serif;
+        }
+        input::placeholder, textarea::placeholder { color: rgba(241, 245, 249, 0.3); }
+        input:focus, textarea:focus { outline: none; border-color: #3b82f6; background: rgba(59, 130, 246, 0.05); }
+        textarea { min-height: 200px; resize: vertical; }
+
+        /* ===== IMAGE SECTION ===== */
+        .image-section { margin-bottom: 25px; }
+        .current-image {
+            margin-top: 10px;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+        .current-image img {
+            width: 100%;
+            max-height: 250px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+        .remove-current-image {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .remove-current-image:hover {
+            background: #dc2626;
+        }
+
+        .image-upload-area {
+            border: 3px dashed rgba(59, 130, 246, 0.5);
+            border-radius: 10px;
+            padding: 25px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: rgba(59, 130, 246, 0.05);
+            margin-top: 10px;
+        }
+        .image-upload-area:hover {
+            background: rgba(59, 130, 246, 0.1);
+            border-color: #3b82f6;
+        }
+        .upload-icon { font-size: 36px; margin-bottom: 8px; }
+        .upload-text { color: rgba(241, 245, 249, 0.8); font-size: 13px; }
+        input[type="file"] { display: none; }
+
+        .image-preview {
+            margin-top: 15px;
+            display: none;
+            position: relative;
+        }
+        .image-preview.active { display: block; }
+        .preview-container {
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .preview-container img {
+            width: 100%;
+            max-height: 250px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+        .remove-preview-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ef4444;
+            color: white;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+        .remove-preview-btn:hover {
+            background: #dc2626;
+        }
+
+        .button-group { display: flex; gap: 12px; margin-top: 30px; }
+        button, .cancel-btn {
+            flex: 1; padding: 14px; border-radius: 10px; font-weight: 700; cursor: pointer; text-align: center;
+            text-decoration: none; font-size: 14px; transition: all 0.3s;
+        }
+        button { background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; border: none; }
+        button:hover { opacity: 0.9; }
+        .cancel-btn { background: rgba(255, 255, 255, 0.1); color: #f1f5f9; border: 1px solid rgba(255, 255, 255, 0.2);
+                      display: flex; align-items: center; justify-content: center; }
+        .cancel-btn:hover { background: rgba(255, 255, 255, 0.15); }
+
+        /* ===== FOOTER ===== */
+        footer { background: rgba(30, 41, 59, 0.9); border-top: 1px solid rgba(255, 255, 255, 0.1);
+                 text-align: center; padding: 25px 20px; color: rgba(241, 245, 249, 0.6); font-size: 14px; }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .header-content { flex-direction: column; gap: 15px; }
+            .edit-box { padding: 30px 25px; }
+            h2 { font-size: 24px; }
+            .button-group { flex-direction: column; }
+        }
+
+        /* ===== TOAST ===== */
+        #toast {
+            visibility: hidden; min-width: 250px; background-color: #333; color: #fff;
+            text-align: center; padding: 14px 20px; border-radius: 8px; position: fixed;
+            bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 1000;
+            font-family: 'Poppins', sans-serif; font-size: 14px; opacity: 0;
+            transition: opacity 0.5s, bottom 0.5s;
+        }
+        #toast.show { visibility: visible; opacity: 1; bottom: 50px; }
+    </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+    <div class="header-content">
+        <a href="/" class="logo">MyBlog</a>
+        <a href="/read" class="back-link">← Back to Posts</a>
+    </div>
+</header>
+
+<!-- MAIN CONTENT -->
+<main>
+    <div class="edit-box">
+        <h2>✏️ Edit Your Post</h2>
+
+        <form method="POST" action="/post/{{ post.id }}/edit" enctype="multipart/form-data" id="editForm">
+            <div class="form-group">
+                <label>📝 Title</label>
+                <input type="text" name="title" value="{{ post.title }}" required>
+            </div>
+
+            <div class="form-group">
+                <label>📄 Content</label>
+                <textarea name="content" required>{{ post.content }}</textarea>
+            </div>
+
+            <!-- IMAGE SECTION -->
+            <div class="image-section">
+                <label>🖼️ Featured Image</label>
+                
+                <!-- Show current image if exists -->
+                {% if post.image_url %}
+                <div class="current-image" id="currentImageSection">
+                    <img src="{{ post.image_url }}" alt="Current image">
+                    <button type="button" class="remove-current-image" id="removeCurrentBtn">Remove Image</button>
+                </div>
+                <input type="hidden" name="remove_image" id="removeImageInput" value="">
+                {% endif %}
+
+                <!-- Upload new image area -->
+                <div class="image-upload-area" id="uploadArea" {% if post.image_url %}style="display: none;"{% endif %}>
+                    <div class="upload-icon">📷</div>
+                    <p class="upload-text"> Add image</p>
+                </div>
+                <input type="file" name="image" id="imageInput" accept="image/jpeg,image/png,image/gif,image/webp">
+                
+                <!-- New image preview -->
+                <div class="image-preview" id="imagePreview">
+                    <div class="preview-container">
+                        <img id="previewImg" src="" alt="Preview">
+                        <button type="button" class="remove-preview-btn" id="removePreviewBtn">×</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <a href="/read" class="cancel-btn">Cancel</a>
+                <button type="submit">💾 Update Post</button>
+            </div>
+        </form>
+    </div>
+</main>
+
+<!-- FOOTER -->
+<footer>
+    <p>© 2026 MyBlog. All rights reserved.</p>
+</footer>
+
+<!-- TOAST -->
+<div id="toast">Post updated successfully! ✅</div>
+
+<script>
+    // DOM Elements
+    const form = document.getElementById('editForm');
+    const uploadArea = document.getElementById('uploadArea');
+    const imageInput = document.getElementById('imageInput');
+    const imagePreview = document.getElementById('imagePreview');
+    const previewImg = document.getElementById('previewImg');
+    const removePreviewBtn = document.getElementById('removePreviewBtn');
+    const currentImageSection = document.getElementById('currentImageSection');
+    const removeCurrentBtn = document.getElementById('removeCurrentBtn');
+    const removeImageInput = document.getElementById('removeImageInput');
+    const toast = document.getElementById('toast');
+
+    // Click to upload
+    if (uploadArea) {
+        uploadArea.addEventListener('click', () => {
+            imageInput.click();
+        });
+    }
+
+    // Handle file selection
+    imageInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            handleImageFile(file);
+        }
+    });
+
+    // Drag and drop handlers
+    if (uploadArea) {
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.style.background = 'rgba(59, 130, 246, 0.15)';
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.style.background = 'rgba(59, 130, 246, 0.05)';
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.style.background = 'rgba(59, 130, 246, 0.05)';
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0 && files[0].type.startsWith('image/')) {
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(files[0]);
+                imageInput.files = dataTransfer.files;
+                
+                handleImageFile(files[0]);
+            }
+        });
+    }
+
+    // Handle image file
+    function handleImageFile(file) {
+        if (file.size > 5 * 1024 * 1024) {
+            alert('Image size should be less than 5MB');
+            imageInput.value = '';
+            return;
+        }
+
+        if (!file.type.startsWith('image/')) {
+            alert('Please select an image file');
+            imageInput.value = '';
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            previewImg.src = e.target.result;
+            imagePreview.classList.add('active');
+            if (uploadArea) uploadArea.style.display = 'none';
+            if (currentImageSection) currentImageSection.style.display = 'none';
+        };
+        reader.readAsDataURL(file);
+    }
+
+    // Remove new image preview
+    removePreviewBtn.addEventListener('click', () => {
+        imageInput.value = '';
+        imagePreview.classList.remove('active');
+        if (currentImageSection) {
+            currentImageSection.style.display = 'block';
+        } else if (uploadArea) {
+            uploadArea.style.display = 'block';
+        }
+    });
+
+    // Remove current image
+    if (removeCurrentBtn) {
+        removeCurrentBtn.addEventListener('click', () => {
+            if (confirm('Are you sure you want to remove the current image?')) {
+                currentImageSection.style.display = 'none';
+                removeImageInput.value = 'true';
+                if (uploadArea) uploadArea.style.display = 'block';
+            }
+        });
+    }
+
+    // Form submission
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        toast.classList.add('show');
+
+        setTimeout(() => {
+            form.submit();
+        }, 500);
+    });
+</script>
+
+</body>
+</html>

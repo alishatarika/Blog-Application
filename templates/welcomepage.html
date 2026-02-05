@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MyBlog – Stories Worth Reading</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+    --midnight: #0A0E27;
+    --deep-navy: #1A1F3A;
+    --electric-cyan: #00E5FF;
+    --coral-burst: #FF6B6B;
+    --soft-lavender: #B794F6;
+    --warm-cream: #FFF8F0;
+}
+
+body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--midnight);
+    color: var(--warm-cream);
+    overflow-x: hidden;
+}
+
+/* Background Glow */
+body::before {
+    content: '';
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background:
+        radial-gradient(circle at 20% 80%, rgba(0,229,255,0.15), transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255,107,107,0.1), transparent 50%);
+    z-index: -1;
+    animation: pulse 15s infinite alternate;
+}
+@keyframes pulse { from {opacity:1;} to {opacity:.7;} }
+
+/* HEADER */
+header {
+    padding: 25px 60px;
+    background: rgba(26,31,58,0.6);
+    backdrop-filter: blur(20px);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
+
+.logo {
+    font-family: 'Fraunces', serif;
+    font-size: 32px;
+    font-weight: 900;
+    background: linear-gradient(135deg,var(--electric-cyan),var(--soft-lavender));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    transition: 0.3s;
+}
+.logo:hover { filter: drop-shadow(0 0 10px var(--electric-cyan)); }
+
+nav { display: flex; gap: 40px; align-items: center; }
+
+nav a {
+    text-decoration: none;
+    color: var(--warm-cream);
+    position: relative;
+    padding-bottom: 5px;
+}
+nav a::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg,var(--electric-cyan),var(--coral-burst));
+    transition: 0.3s;
+}
+nav a:hover::before, nav a.active::before { width: 100%; }
+nav a.active { color: var(--electric-cyan); }
+
+.nav-btn {
+    padding: 10px 22px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+}
+
+.btn-profile {
+    background: rgba(0, 229, 255, 0.1);
+    color: var(--electric-cyan);
+    border: 1px solid rgba(0, 229, 255, 0.3);
+}
+
+.btn-profile:hover {
+    background: rgba(0, 229, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+.btn-logout {
+    background: rgba(255, 107, 107, 0.1);
+    color: var(--coral-burst);
+    border: 1px solid rgba(255, 107, 107, 0.3);
+}
+
+.btn-logout:hover {
+    background: rgba(255, 107, 107, 0.2);
+    transform: translateY(-2px);
+}
+
+/* HERO */
+.main {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 80px 20px;
+    position: relative;
+}
+
+.welcome-container { max-width: 900px; }
+
+h1 {
+    font-family: 'Fraunces', serif;
+    font-size: 72px;
+    line-height: 1.1;
+    margin-bottom: 25px;
+    text-shadow: 0 10px 40px rgba(0,0,0,0.4);
+}
+
+p {
+    font-size: 20px;
+    opacity: 0.8;
+    margin-bottom: 50px;
+}
+
+/* BUTTONS */
+.button-group {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.btn {
+    padding: 18px 45px;
+    border-radius: 50px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: 0.4s;
+    font-family: 'DM Sans', sans-serif;
+}
+
+.login-btn {
+    background: linear-gradient(135deg,var(--electric-cyan),#00B8D4);
+    color: var(--midnight);
+}
+.login-btn:hover { transform: translateY(-5px); }
+
+.signup-btn {
+    border: 2px solid rgba(255,255,255,0.3);
+    color: var(--warm-cream);
+}
+.signup-btn:hover {
+    background: rgba(255,107,107,0.1);
+    border-color: var(--coral-burst);
+}
+
+.create-btn {
+    background: linear-gradient(135deg, var(--soft-lavender), var(--coral-burst));
+    color: var(--warm-cream);
+}
+.create-btn:hover { 
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(183, 148, 246, 0.3);
+}
+
+/* FEATURES */
+.features {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    padding: 100px 40px;
+    text-align: center;
+}
+.feature {
+    background: rgba(255,255,255,0.05);
+    padding: 40px;
+    border-radius: 20px;
+    max-width: 280px;
+    transition: 0.4s;
+}
+.feature:hover {
+    transform: translateY(-10px);
+    background: rgba(0,229,255,0.08);
+}
+
+/* FOOTER */
+footer {
+    text-align: center;
+    padding: 30px;
+    font-size: 14px;
+    opacity: 0.5;
+}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+    header { padding: 20px 30px; }
+    h1{font-size:48px;}
+    .features{flex-direction:column; align-items:center;}
+    nav { gap: 20px; }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">MyBlog</div>
+    <nav>
+        <a href="/" class="nav-btn btn-profile">Home</a>
+        {% if current_user %}
+            <a href="/read"class="nav-btn btn-profile">Read</a>
+            <a href="/profile" class="nav-btn btn-profile">Profile</a>
+            <form method="POST" action="/logout" style="display: inline;">
+                <button type="submit" class="nav-btn btn-logout">Logout</button>
+            </form>
+        {% else %}
+            <a href="/login">Login</a>
+            <a href="/register">Sign Up</a>
+        {% endif %}
+    </nav>
+</header>
+
+<div class="main">
+    <div class="welcome-container">        
+        {% if current_user %}
+            <h1>Welcome Back,<br>{{ current_user.username }}! 👋</h1>
+            <p>Ready to share your next story? Explore the latest posts or create something amazing.</p>
+            
+            <div class="button-group">
+                <a href="/read" class="btn login-btn">📖 Read Posts</a>
+                <a href="/create-post" class="btn create-btn">✍️ Create Post</a>
+            </div>
+        {% else %}
+            <h1>Share Stories<br>That Matter</h1>
+            <p>A modern space for writers, thinkers, and creators to publish ideas and connect through meaningful content.</p>
+
+            <div class="button-group">
+                <a href="/read" class="btn login-btn">Start Reading</a>
+                <a href="/register" class="btn signup-btn">Create Account</a>
+            </div>
+        {% endif %}
+    </div>
+    
+</div>
+
+<footer>
+    © 2026 MyBlog Platform • Designed for creators worldwide
+</footer>
+
+</body>
+</html>
