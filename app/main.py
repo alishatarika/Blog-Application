@@ -7,7 +7,7 @@ from app.routers.login_controller import router
 from app.routers.registration_controller import router as registration
 from app.routers.post_controller import router as post
 import app.models
-from app.helper.auth_api import router as auth_api
+from app.routers.auth_controller import router as auth_api
 
 app = FastAPI()
 

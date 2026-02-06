@@ -1,5 +1,4 @@
 from app.helper import dependencies
-from app.helper import auth_api
 from app.helper import imagefile
 
 __all__ = [
