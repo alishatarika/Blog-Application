@@ -42,47 +42,47 @@ body::before {
 
 /* HEADER */
 header {
-    padding: 25px 60px;
-    background: rgba(26,31,58,0.6);
+    padding: 20px 60px;
+    background: rgba(26,31,58,0.7);
     backdrop-filter: blur(20px);
     display: flex;
     justify-content: space-between;
     align-items: center;
     position: sticky;
     top: 0;
-    z-index: 50;
+    z-index: 100;
+    border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.logo-icon {
+    width: 40px;
+    height: 40px;
+    filter: drop-shadow(0 2px 8px rgba(59, 130, 246, 0.3));
+}
+
+.logo-container:hover .logo-icon {
+    filter: drop-shadow(0 4px 15px rgba(59, 130, 246, 0.5));
+    transform: scale(1.05);
 }
 
 .logo {
     font-family: 'Fraunces', serif;
-    font-size: 32px;
+    font-size: 28px;
     font-weight: 900;
     background: linear-gradient(135deg,var(--electric-cyan),var(--soft-lavender));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    transition: 0.3s;
 }
-.logo:hover { filter: drop-shadow(0 0 10px var(--electric-cyan)); }
 
-nav { display: flex; gap: 40px; align-items: center; }
-
-nav a {
-    text-decoration: none;
-    color: var(--warm-cream);
-    position: relative;
-    padding-bottom: 5px;
-}
-nav a::before {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    width: 0;
-    height: 2px;
-    background: linear-gradient(90deg,var(--electric-cyan),var(--coral-burst));
-    transition: 0.3s;
-}
-nav a:hover::before, nav a.active::before { width: 100%; }
-nav a.active { color: var(--electric-cyan); }
+nav { display: flex; gap: 15px; align-items: center; }
 
 .nav-btn {
     padding: 10px 22px;
@@ -186,40 +186,76 @@ p {
     box-shadow: 0 10px 30px rgba(183, 148, 246, 0.3);
 }
 
-/* FEATURES */
-.features {
-    display: flex;
-    justify-content: center;
-    gap: 40px;
-    padding: 100px 40px;
-    text-align: center;
-}
-.feature {
-    background: rgba(255,255,255,0.05);
-    padding: 40px;
-    border-radius: 20px;
-    max-width: 280px;
-    transition: 0.4s;
-}
-.feature:hover {
-    transform: translateY(-10px);
-    background: rgba(0,229,255,0.08);
-}
-
 /* FOOTER */
 footer {
-    text-align: center;
-    padding: 30px;
+    background: rgba(26,31,58,0.7);
+    backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(59, 130, 246, 0.2);
+    padding: 50px 60px 30px;
+}
+
+.footer-content {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 50px;
+    margin-bottom: 40px;
+}
+
+.footer-section h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 15px;
+    background: linear-gradient(135deg, var(--electric-cyan), var(--soft-lavender));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.footer-section p {
+    color: rgba(255, 255, 255, 0.6);
     font-size: 14px;
-    opacity: 0.5;
+    line-height: 1.8;
+}
+
+.footer-links {
+    list-style: none;
+}
+
+.footer-links li {
+    margin-bottom: 12px;
+}
+
+.footer-links a {
+    color: rgba(255, 255, 255, 0.6);
+    text-decoration: none;
+    font-size: 14px;
+    transition: all 0.3s;
+}
+
+.footer-links a:hover {
+    color: var(--electric-cyan);
+    transform: translateX(5px);
+    display: inline-block;
+}
+
+.footer-bottom {
+    border-top: 1px solid rgba(59, 130, 246, 0.2);
+    padding-top: 25px;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 14px;
 }
 
 /* RESPONSIVE */
 @media(max-width:768px){
-    header { padding: 20px 30px; }
+    header { padding: 20px 30px; flex-direction: column; gap: 20px; }
     h1{font-size:48px;}
-    .features{flex-direction:column; align-items:center;}
-    nav { gap: 20px; }
+    .footer-grid{grid-template-columns: 1fr;}
+    nav { gap: 10px; flex-wrap: wrap; justify-content: center; }
 }
 </style>
 </head>
@@ -227,18 +263,31 @@ footer {
 <body>
 
 <header>
-    <div class="logo">MyBlog</div>
+    <a href="/" class="logo-container">
+        <svg class="logo-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#00E5FF;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#B794F6;stop-opacity:1" />
+                </linearGradient>
+            </defs>
+            <circle cx="50" cy="50" r="45" fill="url(#logoGradient)" opacity="0.2"/>
+            <path d="M30 35 L50 25 L70 35 L70 65 L50 75 L30 65 Z" fill="none" stroke="url(#logoGradient)" stroke-width="4"/>
+            <circle cx="50" cy="50" r="8" fill="url(#logoGradient)"/>
+        </svg>
+        <div class="logo">MyBlog</div>
+    </a>
     <nav>
         <a href="/" class="nav-btn btn-profile">Home</a>
         {% if current_user %}
-            <a href="/read"class="nav-btn btn-profile">Read</a>
+            <a href="/read" class="nav-btn btn-profile">Read</a>
             <a href="/profile" class="nav-btn btn-profile">Profile</a>
             <form method="POST" action="/logout" style="display: inline;">
                 <button type="submit" class="nav-btn btn-logout">Logout</button>
             </form>
         {% else %}
-            <a href="/login"class="nav-btn btn-profile">Login</a>
-            <a href="/register"class="nav-btn btn-profile">Sign Up</a>
+            <a href="/login" class="nav-btn btn-profile">Login</a>
+            <a href="/register" class="nav-btn btn-profile">Sign Up</a>
         {% endif %}
     </nav>
 </header>
@@ -251,7 +300,7 @@ footer {
             
             <div class="button-group">
                 <a href="/read" class="btn login-btn">📖 Read Posts</a>
-                <a href="/create-post" class="btn create-btn">✍️ Create Post</a>
+                <a href="/create-post" class="btn create-btn">✏️ Create Post</a>
             </div>
         {% else %}
             <h1>Share Stories<br>That Matter</h1>
@@ -263,11 +312,30 @@ footer {
             </div>
         {% endif %}
     </div>
-    
 </div>
 
 <footer>
-    © 2026 MyBlog Platform • Designed for creators worldwide
+    <div class="footer-content">
+        <div class="footer-grid">
+            <div class="footer-section">
+                <h3>MyBlog</h3>
+                <p>A modern platform for writers, thinkers, and creators to share their stories with the world. Join our community and start publishing today.</p>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/read">Browse Posts</a></li>
+                </ul>
+            </div>
+            
+        </div>
+        
+        <div class="footer-bottom">
+            <p>© 2026 MyBlog Platform • Designed for creators worldwide</p>
+        </div>
+    </div>
 </footer>
 
 </body>

@@ -61,20 +61,31 @@
             align-items: center;
         }
 
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            filter: drop-shadow(0 2px 8px rgba(59, 130, 246, 0.3));
+        }
+
+        .logo-container:hover .logo-icon {
+            filter: drop-shadow(0 4px 15px rgba(59, 130, 246, 0.5));
+            transform: scale(1.05);
+        }
+
         .logo {
-            font-size: 28px;
+            font-size: 26px;
             font-weight: 700;
             background: linear-gradient(135deg, #3b82f6, #a855f7);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-decoration: none;
-            letter-spacing: -0.5px;
-            transition: all 0.3s ease;
-        }
-
-        .logo:hover {
-            transform: scale(1.05);
-            filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.5));
         }
 
         .nav-buttons {
@@ -294,24 +305,23 @@
             color: #3b82f6;
         }
 
-        /* ===== CONSISTENT FOOTER ===== */
+        /* ===== FOOTER ===== */
         footer {
             background: rgba(30, 41, 59, 0.95);
             backdrop-filter: blur(20px);
             border-top: 1px solid rgba(59, 130, 246, 0.2);
-            margin-top: auto;
-            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.2);
+            padding: 50px 0 30px;
         }
 
         .footer-content {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 50px 25px 25px;
+            padding: 0 25px;
         }
 
         .footer-grid {
             display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr;
+            grid-template-columns: 2fr 1fr 1fr;
             gap: 50px;
             margin-bottom: 40px;
         }
@@ -426,7 +436,20 @@
 <!-- HEADER -->
 <header>
     <div class="header-content">
-        <a href="/" class="logo">MyBlog</a>
+        <a href="/" class="logo-container">
+            <svg class="logo-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#a855f7;stop-opacity:1" />
+                    </linearGradient>
+                </defs>
+                <circle cx="50" cy="50" r="45" fill="url(#logoGradient)" opacity="0.2"/>
+                <path d="M30 35 L50 25 L70 35 L70 65 L50 75 L30 65 Z" fill="none" stroke="url(#logoGradient)" stroke-width="4"/>
+                <circle cx="50" cy="50" r="8" fill="url(#logoGradient)"/>
+            </svg>
+            <div class="logo">MyBlog</div>
+        </a>
         <div class="nav-buttons">
             <a href="/" class="nav-btn btn-profile">🏠 Home</a>
             <a href="/read" class="nav-btn btn-profile">📖 Posts</a>
@@ -490,7 +513,7 @@
         <div class="footer-grid">
             <div class="footer-section">
                 <h3>MyBlog</h3>
-                <p>Share your thoughts, stories, and ideas with the world. Join our community of passionate writers and readers.</p>
+                <p>A modern platform for writers, thinkers, and creators to share their stories with the world. Join our community and start publishing today.</p>
             </div>
             
             <div class="footer-section">
@@ -498,16 +521,20 @@
                 <ul class="footer-links">
                     <li><a href="/">Home</a></li>
                     <li><a href="/read">Browse Posts</a></li>
-                    <li><a href="/register">Sign Up</a></li>
-                    <li><a href="/login">Login</a></li>
                 </ul>
             </div>
-                
             
+            <div class="footer-section">
+                <h3>Account</h3>
+                <ul class="footer-links">
+                    <li><a href="/login">Login</a></li>
+                    <li><a href="/register">Sign Up</a></li>
+                </ul>
+            </div>
         </div>
         
         <div class="footer-bottom">
-            <p>&copy; 2024 MyBlog. All rights reserved. Made with ❤️ by passionate bloggers.</p>
+            <p>&copy; 2026 MyBlog. All rights reserved. Made with ❤️ by passionate bloggers.</p>
         </div>
     </div>
 </footer>

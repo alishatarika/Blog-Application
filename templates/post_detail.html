@@ -54,6 +54,25 @@
             align-items: center;
         }
 
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            filter: drop-shadow(0 2px 8px rgba(59, 130, 246, 0.3));
+        }
+
+        .logo-container:hover .logo-icon {
+            filter: drop-shadow(0 4px 15px rgba(59, 130, 246, 0.5));
+            transform: scale(1.05);
+        }
+
         .logo {
             font-size: 26px;
             font-weight: 700;
@@ -521,7 +540,20 @@
 <!-- ===== HEADER ===== -->
 <header>
     <div class="header-content">
-        <a href="/" class="logo">MyBlog</a>
+        <a href="/" class="logo-container">
+            <svg class="logo-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#a855f7;stop-opacity:1" />
+                    </linearGradient>
+                </defs>
+                <circle cx="50" cy="50" r="45" fill="url(#logoGradient)" opacity="0.2"/>
+                <path d="M30 35 L50 25 L70 35 L70 65 L50 75 L30 65 Z" fill="none" stroke="url(#logoGradient)" stroke-width="4"/>
+                <circle cx="50" cy="50" r="8" fill="url(#logoGradient)"/>
+            </svg>
+            <div class="logo">MyBlog</div>
+        </a>
         <div class="nav-buttons">
             <a href="/read" class="nav-btn btn-home">🏠 Home</a>
             {% if current_user %}
@@ -628,7 +660,24 @@
 <!-- FOOTER -->
 <footer>
     <div class="footer-content">
-        <p>© 2026 MyBlog. All rights reserved. Empowering writers worldwide. 🚀</p>
+        <div class="footer-grid">
+            <div class="footer-section">
+                <h3>MyBlog</h3>
+                <p>A modern platform for writers, thinkers, and creators to share their stories with the world. Join our community and start publishing today.</p>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/read">Browse Posts</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2026 MyBlog. All rights reserved. Made with ❤️ by passionate bloggers.</p>
+        </div>
     </div>
 </footer>
 
