@@ -9,37 +9,20 @@ from app.utils.email import generate_otp, otp_expiry, EmailService
 def create_and_send_otp(db: Session, email: str) -> bool:
     try:
         db.query(OTP).filter(OTP.email == email).delete()
-        db.commit()
-
         otp_code = generate_otp(6)
-        expires_at = otp_expiry(5)
         new_otp = OTP(
             email=email,
             otp_code=otp_code,
-            expires_at=expires_at,
+            expires_at=otp_expiry(5),
             is_verified=False
         )
         db.add(new_otp)
-        db.commit()
+        db.commit() 
 
         email_service = EmailService()
-        email_sent = email_service.send_verification_email(email, otp_code)
-
-        if not email_sent:
-            db.delete(new_otp)
-            db.commit()
-            return False
-
-        return True
-
-    except SQLAlchemyError as e:
-        db.rollback()
-        print("DB Error creating OTP:", e)
-        return False
-
+        return email_service.send_verification_email(email, otp_code)
     except Exception as e:
         db.rollback()
-        print("Error creating OTP:", e)
         return False
 
 

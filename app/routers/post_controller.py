@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, Request, Form, HTTPException, UploadFile, File
 from fastapi.responses import HTMLResponse, RedirectResponse
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from fastapi.templating import Jinja2Templates
 from app.database.connection import get_db
 from app.helper.dependencies import get_current_user, get_current_user_optional
@@ -20,6 +20,8 @@ from app.services.post_service import (
 import os
 from typing import Optional
 from app.helper.imagefile import save_upload_file,delete_file_if_exists
+from app.models.post import Post   
+
 
 
 router = APIRouter()
@@ -79,7 +81,24 @@ def create_post_action(
     except Exception as e:
         print("Unexpected error creating post:", e)
         raise HTTPException(status_code=500, detail="Failed to create post")
+    
+    
+@router.get("/post/{post_id}", response_class=HTMLResponse)
+def get_post_detail(post_id: int, request: Request, db: Session = Depends(get_db), user=Depends(get_current_user_optional)):
+    post = (
+        db.query(Post)
+        .options(joinedload(Post.comments).joinedload(Comment.user))
+        .filter(Post.id == post_id, Post.deleted_at.is_(None))
+        .first()
+    )
 
+    if not post:
+        raise HTTPException(status_code=404, detail="Post not found")
+
+    return templates.TemplateResponse(
+        "post_detail.html",
+        {"request": request, "post": post, "current_user": user},
+    )
 # ================= EDIT POST =================
 @router.get("/post/{post_id}/edit", response_class=HTMLResponse)
 def edit_post_page(post_id: int, request: Request, db: Session = Depends(get_db), user=Depends(get_current_user)):
@@ -159,34 +178,28 @@ def delete_post_action(post_id: int, db: Session = Depends(get_db), user=Depends
 # ================= COMMENTS =================
 @router.post("/post/{post_id}/comment", response_class=RedirectResponse)
 def add_comment(post_id: int, comment_text: str = Form(...), db: Session = Depends(get_db), user=Depends(get_current_user)):
-    try:
-        comment_data = CommentCreate(post_id=post_id, comment_text=comment_text)
-        add_comment_to_post(db, comment_data, user.id)
-        return RedirectResponse("/read", status_code=303)
-    except HTTPException:
-        raise
-    except Exception as e:
-        print("Unexpected error adding comment:", e)
-        raise HTTPException(status_code=500, detail="Failed to add comment")
+    comment_data = CommentCreate(post_id=post_id, comment_text=comment_text)
+    add_comment_to_post(db, comment_data, user.id)
+
+    return RedirectResponse(f"/post/{post_id}", status_code=303)
+
+
 
 @router.post("/comment/{comment_id}/delete", response_class=RedirectResponse)
 def delete_comment_action(comment_id: int, db: Session = Depends(get_db), user=Depends(get_current_user)):
-    try:
-        comment = db.query(Comment).filter(Comment.id == comment_id).first()
-        if not comment:
-            raise HTTPException(status_code=404, detail="Comment not found")
+    comment = db.query(Comment).filter(Comment.id == comment_id).first()
+    if not comment:
+        raise HTTPException(status_code=404, detail="Comment not found")
 
-        post = get_post_by_id(db, comment.post_id)
-        if comment.user_id != user.id and post.user_id != user.id:
-            raise HTTPException(status_code=403, detail="Not authorized")
+    post_id = comment.post_id
+    post = get_post_by_id(db, post_id)
 
-        delete_comment(db, comment_id)
-        return RedirectResponse("/read", status_code=303)
-    except HTTPException:
-        raise
-    except Exception as e:
-        print("Unexpected error deleting comment:", e)
-        raise HTTPException(status_code=500, detail="Failed to delete comment")
+    if comment.user_id != user.id and post.user_id != user.id:
+        raise HTTPException(status_code=403, detail="Not authorized")
+
+    delete_comment(db, comment_id)
+
+    return RedirectResponse(f"/post/{post_id}", status_code=303)
 
 # ================= PROFILE =================
 @router.get("/profile", response_class=HTMLResponse)
