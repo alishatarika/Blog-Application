@@ -40,47 +40,43 @@ body::before {
 }
 @keyframes pulse { from {opacity:1;} to {opacity:.7;} }
 
-/* HEADER */
-header {
-    padding: 20px 60px;
-    background: rgba(26,31,58,0.7);
-    backdrop-filter: blur(20px);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    border-bottom: 1px solid rgba(59, 130, 246, 0.2);
-}
-
+ /* ===== HEADER ===== */
+        header {
+            background: rgba(30, 41, 59, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+        .header-content { max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; }
 .logo-container {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    text-decoration: none;
-    transition: 0.3s;
-}
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            transition: 0.3s;
+        }
 
-.logo-icon {
-    width: 40px;
-    height: 40px;
-    filter: drop-shadow(0 2px 8px rgba(59, 130, 246, 0.3));
-}
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            filter: drop-shadow(0 2px 8px rgba(59, 130, 246, 0.3));
+        }
 
-.logo-container:hover .logo-icon {
-    filter: drop-shadow(0 4px 15px rgba(59, 130, 246, 0.5));
-    transform: scale(1.05);
-}
+        .logo-container:hover .logo-icon {
+            filter: drop-shadow(0 4px 15px rgba(59, 130, 246, 0.5));
+            transform: scale(1.05);
+        }
 
-.logo {
-    font-family: 'Fraunces', serif;
-    font-size: 28px;
-    font-weight: 900;
-    background: linear-gradient(135deg,var(--electric-cyan),var(--soft-lavender));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #3b82f6;
+            text-decoration: none;
+        }
 
 nav { display: flex; gap: 15px; align-items: center; }
 
@@ -97,14 +93,14 @@ nav { display: flex; gap: 15px; align-items: center; }
 }
 
 .btn-profile {
-    background: rgba(0, 229, 255, 0.1);
-    color: var(--electric-cyan);
-    border: 1px solid rgba(0, 229, 255, 0.3);
+    background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+            border: 1px solid rgba(59, 130, 246, 0.3);
 }
 
 .btn-profile:hover {
-    background: rgba(0, 229, 255, 0.2);
-    transform: translateY(-2px);
+    background: rgba(59, 130, 246, 0.2);
+            transform: translateY(-2px);
 }
 
 .btn-logout {
@@ -263,34 +259,39 @@ footer {
 <body>
 
 <header>
-    <a href="/" class="logo-container">
-        <svg class="logo-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-                <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" style="stop-color:#00E5FF;stop-opacity:1" />
-                    <stop offset="100%" style="stop-color:#B794F6;stop-opacity:1" />
-                </linearGradient>
-            </defs>
-            <circle cx="50" cy="50" r="45" fill="url(#logoGradient)" opacity="0.2"/>
-            <path d="M30 35 L50 25 L70 35 L70 65 L50 75 L30 65 Z" fill="none" stroke="url(#logoGradient)" stroke-width="4"/>
-            <circle cx="50" cy="50" r="8" fill="url(#logoGradient)"/>
-        </svg>
-        <div class="logo">MyBlog</div>
-    </a>
-    <nav>
-        <a href="/" class="nav-btn btn-profile">Home</a>
-        {% if current_user %}
-            <a href="/read" class="nav-btn btn-profile">Read</a>
-            <a href="/profile" class="nav-btn btn-profile">Profile</a>
-            <form method="POST" action="/logout" style="display: inline;">
-                <button type="submit" class="nav-btn btn-logout">Logout</button>
-            </form>
-        {% else %}
-            <a href="/login" class="nav-btn btn-profile">Login</a>
-            <a href="/register" class="nav-btn btn-profile">Sign Up</a>
-        {% endif %}
-    </nav>
+    <div class="header-content">
+        <a href="/" class="logo-container">
+            <svg class="logo-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    
+                    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#a855f7;stop-opacity:1" />
+                    </linearGradient>
+                </defs>
+                <circle cx="50" cy="50" r="45" fill="url(#logoGradient)" opacity="0.2"/>
+                <path d="M30 35 L50 25 L70 35 L70 65 L50 75 L30 65 Z" fill="none" stroke="url(#logoGradient)" stroke-width="4"/>
+                <circle cx="50" cy="50" r="8" fill="url(#logoGradient)"/>
+            </svg>
+            <div class="logo">MyBlog</div>
+        </a>
+        <div class="nav-buttons">
+            <a href="/" class="nav-btn btn-profile">🏠 Home</a>
+
+            {% if current_user %}
+                <a href="/read" class="nav-btn btn-profile">📖 Posts</a>
+                <a href="/profile" class="nav-btn btn-profile">👤 Profile</a>
+                <form method="POST" action="/logout" style="display: inline;">
+                    <button type="submit" class="nav-btn btn-profile">🚪 Logout</button>
+                </form>
+            {% else %}
+                <a href="/login" class="nav-btn btn-profile">🔑 Login</a>
+                <a href="/register" class="nav-btn btn-profile">✨ Sign Up</a>
+            {% endif %}
+        </div>
+    </div>
 </header>
+
 
 <div class="main">
     <div class="welcome-container">        
