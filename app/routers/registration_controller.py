@@ -15,13 +15,6 @@ from app.utils.jwt_handler import create_access_token
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 
-def add_no_cache_headers(response):
-    """Add headers to prevent caching"""
-    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate, max-age=0"
-    response.headers["Pragma"] = "no-cache"
-    response.headers["Expires"] = "0"
-    return response
-
 
 @router.get("/register")
 def register_page(request: Request, user=Depends(get_current_user_optional)):
@@ -33,7 +26,7 @@ def register_page(request: Request, user=Depends(get_current_user_optional)):
             "register.html",
             {"request": request, "errors": {}, "values": {}, "show_otp": False},
         )
-        return add_no_cache_headers(response)
+        return response
     except HTTPException:
         raise
     except Exception as e:
@@ -68,7 +61,7 @@ def register_user(
                 "register.html",
                 {"request": request, "errors": errors, "values": values, "show_otp": False},
             )
-            return add_no_cache_headers(response)
+            return response
         
         existing_email = db.query(User).filter(User.email == user_data.email).first()
         if existing_email:
@@ -77,7 +70,7 @@ def register_user(
                 "register.html",
                 {"request": request, "errors": errors, "values": values, "show_otp": False},
             )
-            return add_no_cache_headers(response)
+            return response
         
         otp_sent = create_and_send_otp(db, user_data.email)
         
@@ -87,7 +80,7 @@ def register_user(
                 "register.html",
                 {"request": request, "errors": errors, "values": values, "show_otp": False},
             )
-            return add_no_cache_headers(response)
+            return response
         
         # Store registration data in session
         request.session['pending_registration'] = {
@@ -105,7 +98,7 @@ def register_user(
                 "show_otp": True,
             },
         )
-        return add_no_cache_headers(response)
+        return response
 
     except ValidationError as e:
         for error in e.errors():
@@ -116,7 +109,7 @@ def register_user(
             "register.html",
             {"request": request, "errors": errors, "values": values, "show_otp": False},
         )
-        return add_no_cache_headers(response)
+        return response
 
     except HTTPException as e:
         detail = e.detail if hasattr(e, "detail") else str(e)
@@ -126,7 +119,7 @@ def register_user(
             "register.html",
             {"request": request, "errors": errors, "values": values, "show_otp": False},
         )
-        return add_no_cache_headers(response)
+        return response
 
     except Exception as e:
         print("Unexpected error during registration:", e)
@@ -136,7 +129,7 @@ def register_user(
             "register.html",
             {"request": request, "errors": errors, "values": values, "show_otp": False},
         )
-        return add_no_cache_headers(response)
+        return response
 
 
 @router.post("/verify-otp", response_class=HTMLResponse)
@@ -165,7 +158,7 @@ def verify_otp_and_register(
                 "register.html",
                 {"request": request, "errors": errors, "values": values, "show_otp": True},
             )
-            return add_no_cache_headers(response)
+            return response
 
         user_data = RegisterSchema(
             username=username,
@@ -198,4 +191,4 @@ def verify_otp_and_register(
             "register.html",
             {"request": request, "errors": errors, "values": values, "show_otp": True},
         )
-        return add_no_cache_headers(response)
+        return response

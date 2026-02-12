@@ -159,8 +159,9 @@ p {
 }
 
 .login-btn {
-    background: linear-gradient(135deg,var(--electric-cyan),#00B8D4);
-    color: var(--midnight);
+    border: 2px solid rgba(255,255,255,0.3);
+    color: var(--warm-cream);
+    
 }
 .login-btn:hover { transform: translateY(-5px); }
 
@@ -169,8 +170,8 @@ p {
     color: var(--warm-cream);
 }
 .signup-btn:hover {
-    background: rgba(255,107,107,0.1);
-    border-color: var(--coral-burst);
+    transform: translateY(-5px);
+   
 }
 
 .create-btn {
@@ -301,7 +302,7 @@ footer {
             
             <div class="button-group">
                 <a href="/read" class="btn login-btn">📖 Read Posts</a>
-                <a href="/create-post" class="btn create-btn">✏️ Create Post</a>
+                <a href="/create-post" class="btn login-btn">✏️ Create Post</a>
             </div>
         {% else %}
             <h1>Share Stories<br>That Matter</h1>

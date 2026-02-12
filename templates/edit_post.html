@@ -1,46 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Edit Post | MyBlog</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>Edit Post | MyBlog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #f1f5f9;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
 
-<style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-    color: #f1f5f9;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
-
-/* Background Particles */
-body::before {
-    content: '';
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    background: 
-        radial-gradient(circle at 20% 80%, rgba(59, 130, 246, 0.1), transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(168, 85, 247, 0.1), transparent 50%);
-    z-index: -1;
-    animation: pulse 15s infinite alternate;
-}
-
-@keyframes pulse {
-    from { opacity: 1; }
-    to { opacity: 0.7; }
-}
-
- /* ===== HEADER ===== */
+        /* ===== HEADER ===== */
         header {
             background: rgba(30, 41, 59, 0.95);
             backdrop-filter: blur(20px);
@@ -52,7 +28,7 @@ body::before {
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
         }
         .header-content { max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; }
-.logo-container {
+        .logo-container {
             display: flex;
             align-items: center;
             gap: 12px;
@@ -77,643 +53,344 @@ body::before {
             color: #3b82f6;
             text-decoration: none;
         }
+        nav { display: flex; gap: 30px; align-items: center; }
+        nav a { color: rgba(241, 245, 249, 0.8); text-decoration: none; font-weight: 500; transition: all 0.3s; }
+        nav a:hover { color: #3b82f6; }
+        .nav-btn {
+            padding: 10px 22px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+        }
 
-.nav-buttons {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-}
-
-.nav-btn {
-    padding: 10px 22px;
-    border-radius: 25px;
-    font-weight: 600;
-    font-size: 14px;
-    text-decoration: none;
-    border: none;
-    cursor: pointer;
-    font-family: 'Poppins', sans-serif;
-    transition: all 0.3s ease;
-}
-
-.btn-profile {
-    background: rgba(59, 130, 246, 0.1);
-    color: #3b82f6;
-    border: 1px solid rgba(59, 130, 246, 0.3);
-}
-
-.btn-profile:hover {
-    background: rgba(59, 130, 246, 0.2);
-    transform: translateY(-2px);
-}
-
-.btn-logout {
+        .btn-create {
             background: rgba(59, 130, 246, 0.1);
             color: #3b82f6;
             border: 1px solid rgba(59, 130, 246, 0.3);
-}
-
-.btn-logout:hover {
-    background: rgba(239, 68, 68, 0.2);
-    transform: translateY(-2px);
-}
-
-/* ===== MAIN ===== */
-main {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 40px 20px;
-}
-
-.edit-container {
-    background: rgba(30, 41, 59, 0.8);
-    backdrop-filter: blur(20px);
-    padding: 50px;
-    border-radius: 20px;
-    width: 100%;
-    max-width: 900px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-    animation: slideUp 0.5s ease;
-}
-
-@keyframes slideUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.edit-header {
-    text-align: center;
-    margin-bottom: 40px;
-}
-
-.edit-header h1 {
-    font-size: 36px;
-    margin-bottom: 10px;
-    background: linear-gradient(135deg, #3b82f6, #a855f7);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-}
-
-.edit-header p {
-    color: rgba(241, 245, 249, 0.6);
-    font-size: 15px;
-}
-
-.back-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    color: rgba(241, 245, 249, 0.6);
-    text-decoration: none;
-    font-size: 14px;
-    margin-bottom: 30px;
-    transition: all 0.3s;
-}
-
-.back-link:hover {
-    color: #3b82f6;
-    transform: translateX(-3px);
-}
-
-/* ===== FORM STYLING ===== */
-.form-group {
-    margin-bottom: 30px;
-}
-
-.form-label {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 15px;
-    font-weight: 600;
-    color: rgba(241, 245, 249, 0.9);
-    margin-bottom: 12px;
-}
-
-.label-icon {
-    font-size: 18px;
-}
-
-.char-counter {
-    margin-left: auto;
-    font-size: 13px;
-    color: rgba(241, 245, 249, 0.5);
-    font-weight: 400;
-}
-
-input[type="text"],
-textarea {
-    width: 100%;
-    padding: 15px 18px;
-    border-radius: 12px;
-    border: 2px solid rgba(255, 255, 255, 0.1);
-    background: rgba(255, 255, 255, 0.05);
-    color: #f1f5f9;
-    font-size: 15px;
-    font-family: 'Poppins', sans-serif;
-    transition: all 0.3s;
-}
-
-input[type="text"]::placeholder,
-textarea::placeholder {
-    color: rgba(241, 245, 249, 0.3);
-}
-
-input[type="text"]:focus,
-textarea:focus {
-    outline: none;
-    border-color: #3b82f6;
-    background: rgba(59, 130, 246, 0.08);
-    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
-}
-
-input.error,
-textarea.error {
-    border-color: #ef4444;
-    background: rgba(239, 68, 68, 0.1);
-}
-
-input.success,
-textarea.success {
-    border-color: #10b981;
-    background: rgba(16, 185, 129, 0.05);
-}
-
-.error-message {
-    display: block;
-    color: #ef4444;
-    font-size: 13px;
-    margin-top: 6px;
-    font-weight: 500;
-    min-height: 20px;
-    animation: shake 0.3s ease;
-}
-
-@keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-5px); }
-    75% { transform: translateX(5px); }
-}
-
-textarea {
-    min-height: 280px;
-    resize: vertical;
-    line-height: 1.6;
-}
-
-/* ===== IMAGE SECTION ===== */
-.image-section {
-    margin-bottom: 30px;
-}
-
-.current-image {
-    position: relative;
-    border-radius: 12px;
-    overflow: hidden;
-    margin-bottom: 15px;
-}
-
-.current-image img {
-    width: 100%;
-    max-height: 400px;
-    object-fit: cover;
-    display: block;
-}
-
-.image-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(to top, rgba(0,0,0,0.5), transparent);
-    opacity: 0;
-    transition: opacity 0.3s;
-    display: flex;
-    align-items: flex-end;
-    padding: 20px;
-}
-
-.current-image:hover .image-overlay {
-    opacity: 1;
-}
-
-.image-info {
-    color: white;
-    font-size: 13px;
-}
-
-.no-image-placeholder {
-    background: rgba(255, 255, 255, 0.05);
-    border: 2px dashed rgba(59, 130, 246, 0.3);
-    padding: 60px 40px;
-    text-align: center;
-    border-radius: 12px;
-    color: rgba(241, 245, 249, 0.5);
-    transition: all 0.3s;
-}
-
-.no-image-placeholder:hover {
-    background: rgba(59, 130, 246, 0.05);
-    border-color: rgba(59, 130, 246, 0.5);
-}
-
-.placeholder-icon {
-    font-size: 64px;
-    margin-bottom: 15px;
-    opacity: 0.5;
-}
-
-.image-upload-area {
-    border: 3px dashed rgba(59, 130, 246, 0.4);
-    border-radius: 12px;
-    padding: 40px;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.3s;
-    background: rgba(59, 130, 246, 0.03);
-}
-
-.image-upload-area:hover {
-    background: rgba(59, 130, 246, 0.08);
-    border-color: #3b82f6;
-    transform: translateY(-2px);
-}
-
-.upload-icon {
-    font-size: 48px;
-    margin-bottom: 15px;
-}
-
-.upload-text {
-    color: rgba(241, 245, 249, 0.7);
-    font-size: 15px;
-}
-
-.upload-hint {
-    color: rgba(241, 245, 249, 0.4);
-    font-size: 13px;
-    margin-top: 8px;
-}
-
-input[type="file"] {
-    display: none;
-}
-
-.image-actions {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-top: 15px;
-}
-
-.image-btn {
-    padding: 12px 20px;
-    border-radius: 10px;
-    font-weight: 600;
-    font-size: 14px;
-    cursor: pointer;
-    border: none;
-    transition: all 0.3s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-}
-
-.btn-change {
-    background: rgba(59, 130, 246, 0.15);
-    color: #3b82f6;
-    border: 1px solid rgba(59, 130, 246, 0.3);
-}
-
-.btn-change:hover {
-    background: rgba(59, 130, 246, 0.25);
-    transform: translateY(-2px);
-}
-
-.btn-remove {
-    background: rgba(239, 68, 68, 0.15);
-    color: #ef4444;
-    border: 1px solid rgba(239, 68, 68, 0.3);
-}
-
-.btn-remove:hover {
-    background: rgba(239, 68, 68, 0.25);
-    transform: translateY(-2px);
-}
-
-/* ===== BUTTONS ===== */
-.button-group {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 15px;
-    margin-top: 40px;
-}
-
-.btn {
-    padding: 16px 24px;
-    border-radius: 12px;
-    font-weight: 700;
-    font-size: 15px;
-    text-align: center;
-    text-decoration: none;
-    cursor: pointer;
-    transition: all 0.3s;
-    border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-}
-
-.cancel-btn {
-    background: rgba(255, 255, 255, 0.1);
-    color: rgba(241, 245, 249, 0.8);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.cancel-btn:hover {
-    background: rgba(255, 255, 255, 0.15);
-    transform: translateY(-2px);
-}
-
-.submit-btn {
-    background: linear-gradient(135deg, #3b82f6, #2563eb);
-    color: white;
-    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
-}
-
-.submit-btn:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
-}
-
-.submit-btn:active {
-    transform: translateY(0);
-}
-
-.submit-btn:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-}
-
-/* ===== TOAST (only for success/info messages) ===== */
-#toast {
-    visibility: hidden;
-    min-width: 320px;
-    background: linear-gradient(135deg, #10b981, #059669);
-    color: white;
-    text-align: center;
-    padding: 18px 28px;
-    border-radius: 12px;
-    position: fixed;
-    top: -100px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 2000;
-    font-size: 15px;
-    font-weight: 600;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    opacity: 0;
-    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-}
-
-#toast.show {
-    visibility: visible;
-    opacity: 1;
-    top: 30px;
-}
-
-#toast.success {
-    background: linear-gradient(135deg, #10b981, #059669);
-}
-
-#toast.warning {
-    background: linear-gradient(135deg, #f59e0b, #d97706);
-}
-
-/* ===== MODAL ===== */
-#confirmModal {
-    position: fixed;
-    inset: 0;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 3000;
-    animation: fadeIn 0.3s ease;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-.modal-overlay {
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(8px);
-}
-
-.modal-box {
-    position: relative;
-    background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.95));
-    backdrop-filter: blur(20px);
-    padding: 40px;
-    border-radius: 20px;
-    width: 90%;
-    max-width: 450px;
-    text-align: center;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-    animation: modalSlideUp 0.4s ease;
-}
-
-@keyframes modalSlideUp {
-    from {
-        opacity: 0;
-        transform: translateY(50px) scale(0.9);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
-}
-
-.modal-icon {
-    font-size: 56px;
-    margin-bottom: 20px;
-}
-
-.modal-box h3 {
-    color: #ef4444;
-    font-size: 24px;
-    margin-bottom: 15px;
-}
-
-.modal-box p {
-    color: rgba(241, 245, 249, 0.7);
-    font-size: 15px;
-    margin-bottom: 30px;
-    line-height: 1.5;
-}
-
-.modal-buttons {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-}
-
-.modal-btn {
-    padding: 14px 24px;
-    border-radius: 10px;
-    font-weight: 600;
-    cursor: pointer;
-    border: none;
-    transition: all 0.3s;
-    font-size: 15px;
-}
-
-.modal-cancel {
-    background: rgba(255, 255, 255, 0.1);
-    color: #f1f5f9;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.modal-cancel:hover {
-    background: rgba(255, 255, 255, 0.15);
-}
-
-.delete-btn {
-    background: linear-gradient(135deg, #ef4444, #dc2626);
-    color: white;
-    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
-}
-
-.delete-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
-}
-
-footer {
-    background: rgba(26,31,58,0.7);
-    backdrop-filter: blur(20px);
-    border-top: 1px solid rgba(59, 130, 246, 0.2);
-    padding: 50px 60px 30px;
-}
-
-.footer-content {
-    max-width: 1400px;
-    margin: 0 auto;
-}
-
-.footer-grid {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
-    gap: 50px;
-    margin-bottom: 40px;
-}
-
-.footer-section h3 {
-    font-size: 18px;
-    font-weight: 700;
-    margin-bottom: 15px;
-    background: linear-gradient(135deg, var(--electric-cyan), var(--soft-lavender));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-.footer-section p {
-    color: rgba(255, 255, 255, 0.6);
-    font-size: 14px;
-    line-height: 1.8;
-}
-
-.footer-links {
-    list-style: none;
-}
-
-.footer-links li {
-    margin-bottom: 12px;
-}
-
-.footer-links a {
-    color: rgba(255, 255, 255, 0.6);
-    text-decoration: none;
-    font-size: 14px;
-    transition: all 0.3s;
-}
-
-.footer-links a:hover {
-    color: var(--electric-cyan);
-    transform: translateX(5px);
-    display: inline-block;
-}
-
-.footer-bottom {
-    border-top: 1px solid rgba(59, 130, 246, 0.2);
-    padding-top: 25px;
-    text-align: center;
-    color: rgba(255, 255, 255, 0.5);
-    font-size: 14px;
-}
-
-/* ===== RESPONSIVE ===== */
-@media (max-width: 768px) {
-    .header-content {
-        flex-direction: column;
-        gap: 15px;
-    }
-
-    .nav-buttons {
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-
-    .edit-container {
-        padding: 30px 25px;
-    }
-
-    .edit-header h1 {
-        font-size: 28px;
-    }
-
-    .button-group {
-        grid-template-columns: 1fr;
-    }
-
-    .image-actions {
-        grid-template-columns: 1fr;
-    }
-
-    .footer-grid {
-        grid-template-columns: 1fr;
-        gap: 35px;
-    }
-}
-</style>
+        }
+
+        .btn-create:hover {
+            background: rgba(59, 130, 246, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        main { flex: 1; display: flex; justify-content: center; align-items: center; padding: 40px 20px; }
+        .container {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            width: 100%;
+            max-width: 700px;
+            padding: 40px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        h1 { text-align: center; margin-bottom: 10px; font-size: 32px; }
+        .subtitle { text-align: center; color: rgba(241, 245, 249, 0.6); margin-bottom: 30px; font-size: 14px; }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px; }
+        
+        input[type="text"], textarea {
+            width: 100%; padding: 12px 15px; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05); color: #f1f5f9; font-size: 14px; font-family: 'Poppins', sans-serif;
+            transition: all 0.3s;
+        }
+        
+        input.error, textarea.error {
+            border-color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+        }
+        
+        input.success, textarea.success {
+            border-color: #10b981;
+            background: rgba(16, 185, 129, 0.05);
+        }
+        
+        .error-message {
+            display: block;
+            color: #ef4444;
+            font-size: 13px;
+            margin-top: 6px;
+            font-weight: 500;
+            min-height: 20px;
+            animation: shake 0.3s ease;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        
+        input::placeholder, textarea::placeholder { color: rgba(241, 245, 249, 0.3); }
+        input:focus, textarea:focus { outline: none; border-color: #3b82f6; background: rgba(59, 130, 246, 0.05); }
+        textarea { min-height: 200px; resize: vertical; }
+
+        .image-upload-section { margin-top: 20px; }
+        .image-upload-area {
+            border: 3px dashed rgba(59, 130, 246, 0.5);
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: rgba(59, 130, 246, 0.05);
+            min-height: 200px;
+            max-height: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+        .image-upload-area:hover { background: rgba(59, 130, 246, 0.1); border-color: #3b82f6; }
+        .image-upload-area.has-image {
+            padding: 0;
+            border-style: solid;
+        }
+        .upload-icon { font-size: 48px; margin-bottom: 10px; }
+        .upload-text {
+            color: rgba(241, 245, 249, 0.6);
+            font-size: 14px;
+        }
+        .image-preview {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 7px;
+        }
+        input[type="file"] { display: none; }
+        
+        .image-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .btn-secondary {
+            flex: 1;
+            padding: 10px 20px;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 8px;
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(59, 130, 246, 0.2);
+            transform: translateY(-1px);
+        }
+        
+        .btn-danger {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: rgba(239, 68, 68, 0.3);
+            color: #ef4444;
+        }
+        
+        .btn-danger:hover {
+            background: rgba(239, 68, 68, 0.2);
+        }
+
+        .btn {
+            width: 100%; margin-top: 30px; padding: 14px; border: none; border-radius: 10px;
+            background: linear-gradient(135deg, #3b82f6, #a855f7); color: white; font-size: 16px; font-weight: 700;
+            cursor: pointer; transition: all 0.3s; font-family: 'Poppins', sans-serif;
+        }
+        .btn:hover { opacity: 0.9; transform: translateY(-2px); }
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn-cancel {
+            background: rgba(100, 116, 139, 0.3);
+            border: 1px solid rgba(148, 163, 184, 0.3);
+            margin-right: 10px;
+        }
+        
+        .btn-cancel:hover {
+            background: rgba(100, 116, 139, 0.4);
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .form-actions .btn {
+            margin-top: 0;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+        }
+        
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: rgba(30, 41, 59, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+        
+        .modal-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+        
+        .modal h3 {
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+        
+        .modal p {
+            color: rgba(241, 245, 249, 0.7);
+            margin-bottom: 25px;
+            font-size: 14px;
+        }
+        
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .modal-actions .btn {
+            margin-top: 0;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background: rgba(26,31,58,0.7);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(59, 130, 246, 0.2);
+            padding: 50px 60px 30px;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 50px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #3b82f6, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .footer-section p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: #3b82f6;
+            transform: translateX(5px);
+            display: inline-block;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(59, 130, 246, 0.2);
+            padding-top: 25px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 14px;
+        }
+        
+        #toast {
+            visibility: hidden; min-width: 300px; background: linear-gradient(135deg, #10b981, #059669); color: white;
+            text-align: center; padding: 16px 24px; border-radius: 10px; position: fixed;
+            top: -100px; left: 50%; transform: translateX(-50%); z-index: 1000;
+            font-size: 15px; font-weight: 600; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            opacity: 0; transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        #toast.show { visibility: visible; opacity: 1; top: 30px; }
+        #toast.error {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+
+        @media (max-width: 768px) {
+            .header-content { flex-direction: column; gap: 15px; }
+            .footer-grid { grid-template-columns: 1fr; gap: 30px; }
+            .form-actions { flex-direction: column; }
+        }
+    </style>
 </head>
-
 <body>
 
-<!-- TOAST -->
 <div id="toast"></div>
 
-<!-- HEADER -->
+<!-- Remove Image Confirmation Modal -->
+<div id="removeImageModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-icon">⚠️</div>
+        <h3>Remove Featured Image?</h3>
+        <p>This image will be permanently removed when you update the post. This action cannot be undone.</p>
+        <div class="modal-actions">
+            <button class="btn btn-cancel" onclick="closeRemoveModal()">Cancel</button>
+            <button class="btn btn-danger" onclick="confirmRemoveImage()">Remove Image</button>
+        </div>
+    </div>
+</div>
+
 <header>
     <div class="header-content">
         <a href="/" class="logo-container">
@@ -731,118 +408,61 @@ footer {
             <div class="logo">MyBlog</div>
         </a>
         <div class="nav-buttons">
-            <a href="/" class="nav-btn btn-profile">🏠 Home</a>
-            <a href="/read" class="nav-btn btn-profile">📖 Posts</a>
-            <a href="/profile" class="nav-btn btn-profile">👤 Profile</a>
-            <form method="POST" action="/logout" style="display: inline;">
-                <button type="submit" class="nav-btn btn-logout">🚪 Logout</button>
-            </form>
+            <a href="/" class="nav-btn btn-create">🏠 Home</a>
+            <a href="/read" class="nav-btn btn-create">📖 Posts</a>
+            <a href="/register" class="nav-btn btn-create">👤 Profile</a>
+            <a href="/logout" class="nav-btn btn-create">🚪 Logout</a>
         </div>
     </div>
 </header>
 
-<!-- MAIN CONTENT -->
 <main>
-    <div class="edit-container">
-        <a href="/read" class="back-link">← Back to Posts</a>
-        
-        <div class="edit-header">
-            <h1><span>✏️</span> Edit Your Post</h1>
-            <p>Make your changes and update your story</p>
-        </div>
-
-        <form method="POST" action="/post/{{ post.id }}/edit" enctype="multipart/form-data" id="editForm" novalidate>
-            
-            <!-- TITLE INPUT -->
+    <div class="container">
+        <a href="/read" style="color: #3b82f6; text-decoration: none; display: inline-block; margin-bottom: 20px;">← Back to Posts</a>
+        <h1>✏️ Edit Your Post</h1>
+        <p class="subtitle">Make your changes and update your story</p>
+        <form method="post" action="/edit-post/{{ post.id }}" enctype="multipart/form-data" id="postForm" novalidate>
             <div class="form-group">
-                <label class="form-label">
-                    <span class="label-icon">📝</span>
-                    <span>Post Title</span>
-                    <span class="char-counter" id="titleCounter">0/100</span>
-                </label>
-                <input 
-                    type="text" 
-                    name="title" 
-                    id="titleInput"
-                    value="{{ post.title }}" 
-                    maxlength="100"
-                    placeholder="Enter an engaging title for your post"
-                >
+                <label for="title">📝 Post Title</label>
+                <input type="text" name="title" id="title" maxlength="100" value="{{ post.title }}" placeholder="Enter your post title">
                 <span class="error-message" id="titleError"></span>
             </div>
-
-            <!-- CONTENT TEXTAREA -->
+            
             <div class="form-group">
-                <label class="form-label">
-                    <span class="label-icon">📄</span>
-                    <span>Post Content</span>
-                    <span class="char-counter" id="contentCounter">0 words</span>
-                </label>
-                <textarea 
-                    name="content" 
-                    id="contentInput"
-                    placeholder="Share your story, ideas, or insights..."
-                >{{ post.content }}</textarea>
+                <label for="content">📄 Post Content</label>
+                <textarea name="content" id="content" placeholder="Write your content here...">{{ post.content }}</textarea>
                 <span class="error-message" id="contentError"></span>
             </div>
-
-            <!-- IMAGE SECTION -->
-            <div class="form-group image-section">
-                <label class="form-label">
-                    <span class="label-icon">🖼️</span>
-                    <span>Featured Image</span>
-                </label>
-                
-                <div class="current-image" id="currentImageSection">
+            
+            <div class="image-upload-section">
+                <label>🖼️ Featured Image</label>
+                <div class="image-upload-area {% if post.image_url %}has-image{% endif %}" id="uploadArea">
                     {% if post.image_url %}
-                    <img src="{{ post.image_url }}" alt="Current post image">
-                    <div class="image-overlay">
-                        <div class="image-info">Current featured image</div>
-                    </div>
+                    <img src="{{ post.image_url }}" class="image-preview" alt="Current featured image" />
                     {% else %}
-                    <div class="no-image-placeholder">
-                        <div class="placeholder-icon">📷</div>
-                        <p>No image attached to this post</p>
-                    </div>
+                    <div class="upload-icon">📷</div>
+                    <p class="upload-text">Click to add a featured image<br><small>JPG, PNG or GIF (Max 5MB)</small></p>
                     {% endif %}
                 </div>
-
+                <input type="file" name="image" id="imageInput" accept="image/*">
+                <input type="hidden" name="remove_image" id="removeImageFlag" value="false">
+                
                 {% if post.image_url %}
-                <div class="image-actions" id="imageActions">
-                    <button type="button" class="image-btn btn-change" onclick="imageInput.click()">
-                        🔄 Change Image
-                    </button>
-                    <button type="button" class="image-btn btn-remove" onclick="openConfirm()">
-                        🗑️ Remove Image
-                    </button>
-                </div>
-                {% else %}
-                <div class="image-upload-area" id="uploadArea" onclick="imageInput.click()">
-                    <div class="upload-icon">📷</div>
-                    <div class="upload-text">Click to add a featured image</div>
-                    <div class="upload-hint">JPG, PNG or GIF (Max 5MB)</div>
+                <div class="image-actions">
+                    <button type="button" class="btn-secondary" onclick="changeImage()">🔄 Change Image</button>
+                    <button type="button" class="btn-secondary btn-danger" onclick="showRemoveModal()">🗑️ Remove Image</button>
                 </div>
                 {% endif %}
-
-                <input type="file" name="image" id="imageInput" accept="image/*" onchange="previewImage(event)">
-                <input type="hidden" name="remove_image" id="removeImageField" value="false">
             </div>
-
-            <!-- ACTION BUTTONS -->
-            <div class="button-group">
-                <a href="/read" class="btn cancel-btn">
-                    ❌ Cancel
-                </a>
-                <button type="submit" class="btn submit-btn">
-                    💾 Update Post
-                </button>
+            
+            <div class="form-actions">
+                <button type="button" class="btn btn-cancel" onclick="window.location.href='/read'">❌ Cancel</button>
+                <button type="submit" class="btn">💾 Update Post</button>
             </div>
-
         </form>
     </div>
 </main>
 
-<!-- FOOTER -->
 <footer>
     <div class="footer-content">
         <div class="footer-grid">
@@ -859,6 +479,15 @@ footer {
                     <li><a href="/profile">Profile</a></li>
                 </ul>
             </div>
+            
+            <div class="footer-section">
+                <h3>Account</h3>
+                <ul class="footer-links">
+                    <li><a href="/login">Login</a></li>
+                    <li><a href="/register">Sign Up</a></li>
+                    <li><a href="/create-post">Create Post</a></li>
+                </ul>
+            </div>
         </div>
         
         <div class="footer-bottom">
@@ -867,51 +496,81 @@ footer {
     </div>
 </footer>
 
-<!-- CONFIRMATION MODAL -->
-<div id="confirmModal">
-    <div class="modal-overlay" onclick="closeConfirm()"></div>
-    <div class="modal-box">
-        <div class="modal-icon">⚠️</div>
-        <h3>Remove Featured Image?</h3>
-        <p>This image will be permanently removed when you update the post. This action cannot be undone.</p>
-        <div class="modal-buttons">
-            <button class="modal-btn modal-cancel" onclick="closeConfirm()">Cancel</button>
-            <button class="modal-btn delete-btn" onclick="confirmRemoveImage()">Remove Image</button>
-        </div>
-    </div>
-</div>
-
 <script>
-// Form elements
-const titleInput = document.getElementById('titleInput');
-const contentInput = document.getElementById('contentInput');
-const titleCounter = document.getElementById('titleCounter');
-const contentCounter = document.getElementById('contentCounter');
+const uploadArea = document.getElementById('uploadArea');
+const imageInput = document.getElementById('imageInput');
+const postForm = document.getElementById('postForm');
+const titleInput = document.getElementById('title');
+const contentInput = document.getElementById('content');
 const titleError = document.getElementById('titleError');
 const contentError = document.getElementById('contentError');
-const editForm = document.getElementById('editForm');
+const toast = document.getElementById('toast');
+const removeImageModal = document.getElementById('removeImageModal');
+const removeImageFlag = document.getElementById('removeImageFlag');
 
-// Character/Word Counters
-function updateTitleCounter() {
-    const length = titleInput.value.length;
-    titleCounter.textContent = `${length}/100`;
-    if (length > 90) {
-        titleCounter.style.color = '#ef4444';
-    } else {
-        titleCounter.style.color = 'rgba(241, 245, 249, 0.5)';
+let hasExistingImage = uploadArea.classList.contains('has-image');
+
+uploadArea.addEventListener('click', () => {
+    if (!hasExistingImage) {
+        imageInput.click();
     }
+});
+
+function changeImage() {
+    imageInput.click();
 }
 
-function updateContentCounter() {
-    const words = contentInput.value.trim().split(/\s+/).filter(word => word.length > 0).length;
-    contentCounter.textContent = `${words} word${words !== 1 ? 's' : ''}`;
+imageInput.addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function(event) {
+      uploadArea.classList.add('has-image');
+      uploadArea.innerHTML = `<img src="${event.target.result}" class="image-preview" alt="Preview" />`;
+      hasExistingImage = true;
+      removeImageFlag.value = 'false';
+      
+      const actionsDiv = document.querySelector('.image-actions');
+      if (!actionsDiv) {
+        const newActions = document.createElement('div');
+        newActions.className = 'image-actions';
+        newActions.innerHTML = `
+          <button type="button" class="btn-secondary" onclick="changeImage()">🔄 Change Image</button>
+          <button type="button" class="btn-secondary btn-danger" onclick="showRemoveModal()">🗑️ Remove Image</button>
+        `;
+        uploadArea.parentElement.appendChild(newActions);
+      }
+    };
+    reader.readAsDataURL(file);
+  }
+});
+
+function showRemoveModal() {
+    removeImageModal.classList.add('active');
 }
 
-titleInput.addEventListener('input', updateTitleCounter);
-contentInput.addEventListener('input', updateContentCounter);
+function closeRemoveModal() {
+    removeImageModal.classList.remove('active');
+}
 
-updateTitleCounter();
-updateContentCounter();
+function confirmRemoveImage() {
+    uploadArea.classList.remove('has-image');
+    uploadArea.innerHTML = `
+        <div class="upload-icon">📷</div>
+        <p class="upload-text">Click to add a featured image<br><small>JPG, PNG or GIF (Max 5MB)</small></p>
+    `;
+    removeImageFlag.value = 'true';
+    imageInput.value = '';
+    hasExistingImage = false;
+    
+    const actionsDiv = document.querySelector('.image-actions');
+    if (actionsDiv) {
+        actionsDiv.remove();
+    }
+    
+    closeRemoveModal();
+    showToast('Image will be removed when you update the post', false);
+}
 
 function validateTitle() {
     const value = titleInput.value.trim();
@@ -955,13 +614,42 @@ function showSuccess(input, errorElement) {
     errorElement.textContent = '';
 }
 
-// Clear error messages when user starts typing
+function showToast(message, isError = false) {
+    toast.textContent = message;
+    toast.classList.remove('error');
+    if (isError) {
+        toast.classList.add('error');
+    }
+    toast.classList.add('show');
+    
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, 3000);
+}
+
+titleInput.addEventListener('blur', validateTitle);
+contentInput.addEventListener('blur', validateContent);
+
+postForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const isTitleValid = validateTitle();
+    const isContentValid = validateContent();
+    
+    if (isTitleValid && isContentValid) {
+        showToast('Updating post... ✅');
+        
+        setTimeout(() => {
+            postForm.submit();
+        }, 800);
+    } 
+});
+
 titleInput.addEventListener('input', function() {
     if (titleInput.classList.contains('error')) {
         titleInput.classList.remove('error');
         titleError.textContent = '';
     }
-    updateTitleCounter();
 });
 
 contentInput.addEventListener('input', function() {
@@ -969,131 +657,12 @@ contentInput.addEventListener('input', function() {
         contentInput.classList.remove('error');
         contentError.textContent = '';
     }
-    updateContentCounter();
 });
 
-// Toast notification (only for success/info, not validation errors)
-function showToast(message, type = 'success') {
-    const toast = document.getElementById('toast');
-    toast.textContent = message;
-    toast.className = `show ${type}`;
-    
-    setTimeout(() => {
-        toast.classList.remove('show');
-    }, 3000);
-}
-
-// Image preview
-function previewImage(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-    
-    // Validate file size (5MB)
-    if (file.size > 5 * 1024 * 1024) {
-        showToast('Image size must be less than 5MB', 'warning');
-        event.target.value = '';
-        return;
-    }
-    
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        const currentImageSection = document.getElementById('currentImageSection');
-        currentImageSection.innerHTML = `
-            <img src="${e.target.result}" alt="New image preview" style="width:100%;max-height:400px;object-fit:cover;border-radius:12px;">
-            <div class="image-overlay">
-                <div class="image-info">New image preview</div>
-            </div>
-        `;
-        
-        document.getElementById('removeImageField').value = 'false';
-        
-        // Update or add image actions
-        let imageActions = document.getElementById('imageActions');
-        if (!imageActions) {
-            imageActions = document.createElement('div');
-            imageActions.id = 'imageActions';
-            imageActions.className = 'image-actions';
-            imageActions.innerHTML = `
-                <button type="button" class="image-btn btn-change" onclick="imageInput.click()">
-                    🔄 Change Image
-                </button>
-                <button type="button" class="image-btn btn-remove" onclick="openConfirm()">
-                    🗑️ Remove Image
-                </button>
-            `;
-            currentImageSection.parentNode.insertBefore(imageActions, document.getElementById('imageInput'));
-        }
-
-        const uploadArea = document.getElementById('uploadArea');
-        if (uploadArea) uploadArea.remove();
-        
-        showToast('Image selected successfully ✨', 'success');
-    };
-    reader.readAsDataURL(file);
-}
-
-// Modal functions
-function openConfirm() {
-    document.getElementById('confirmModal').style.display = 'flex';
-    document.body.style.overflow = 'hidden';
-}
-
-function closeConfirm() {
-    document.getElementById('confirmModal').style.display = 'none';
-    document.body.style.overflow = 'auto';
-}
-
-function confirmRemoveImage() {
-    closeConfirm();
-    
-    const imageInput = document.getElementById('imageInput');
-    imageInput.value = '';
-    
-    document.getElementById('removeImageField').value = 'true';
-    
-    const currentImageSection = document.getElementById('currentImageSection');
-    currentImageSection.innerHTML = `
-        <div class="no-image-placeholder">
-            <div class="placeholder-icon">📷</div>
-            <p>Image will be removed when you save changes</p>
-        </div>
-    `;
-    
-    const imageActions = document.getElementById('imageActions');
-    if (imageActions) imageActions.remove();
-    
-    showToast('Image marked for removal ⚠️', 'warning');
-}
-
-// Form submission with validation
-editForm.addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    // Validate all fields
-    const isTitleValid = validateTitle();
-    const isContentValid = validateContent();
-    
-    // Check if all validations passed
-    if (isTitleValid && isContentValid) {
-        showToast('Updating your post... ⏳', 'success');
-        
-        setTimeout(() => {
-            editForm.submit();
-        }, 800);
-    } else {
-        // Scroll to first error
-        const firstError = document.querySelector('.error');
-        if (firstError) {
-            firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            firstError.focus();
-        }
-    }
-});
-
-// Keyboard shortcuts
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-        closeConfirm();
+// Close modal on outside click
+removeImageModal.addEventListener('click', function(e) {
+    if (e.target === removeImageModal) {
+        closeRemoveModal();
     }
 });
 </script>
