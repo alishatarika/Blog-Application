@@ -47,25 +47,6 @@
             transform: scale(1.05);
         }
 
-       .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            text-decoration: none;
-            transition: 0.3s;
-        }
-
-        .logo-icon {
-            width: 36px;
-            height: 36px;
-            filter: drop-shadow(0 2px 8px rgba(59, 130, 246, 0.3));
-        }
-
-        .logo-container:hover .logo-icon {
-            filter: drop-shadow(0 4px 15px rgba(59, 130, 246, 0.5));
-            transform: scale(1.05);
-        }
-
         .logo {
             font-size: 24px;
             font-weight: 700;
@@ -111,11 +92,45 @@
         }
         h1 { text-align: center; margin-bottom: 10px; font-size: 32px; }
         .subtitle { text-align: center; color: rgba(241, 245, 249, 0.6); margin-bottom: 30px; font-size: 14px; }
-        label { display: block; margin-top: 20px; margin-bottom: 8px; font-weight: 600; font-size: 14px; }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px; }
+        
         input[type="text"], textarea {
             width: 100%; padding: 12px 15px; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.1);
             background: rgba(255, 255, 255, 0.05); color: #f1f5f9; font-size: 14px; font-family: 'Poppins', sans-serif;
+            transition: all 0.3s;
         }
+        
+        input.error, textarea.error {
+            border-color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+        }
+        
+        input.success, textarea.success {
+            border-color: #10b981;
+            background: rgba(16, 185, 129, 0.05);
+        }
+        
+        .error-message {
+            display: block;
+            color: #ef4444;
+            font-size: 13px;
+            margin-top: 6px;
+            font-weight: 500;
+            min-height: 20px;
+            animation: shake 0.3s ease;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        
         input::placeholder, textarea::placeholder { color: rgba(241, 245, 249, 0.3); }
         input:focus, textarea:focus { outline: none; border-color: #3b82f6; background: rgba(59, 130, 246, 0.05); }
         textarea { min-height: 200px; resize: vertical; }
@@ -140,70 +155,76 @@
             cursor: pointer; transition: all 0.3s;
         }
         .btn:hover { opacity: 0.9; transform: translateY(-2px); }
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
 
         /* ===== FOOTER ===== */
         footer {
-    background: rgba(26,31,58,0.7);
-    backdrop-filter: blur(20px);
-    border-top: 1px solid rgba(59, 130, 246, 0.2);
-    padding: 50px 60px 30px;
-}
+            background: rgba(26,31,58,0.7);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(59, 130, 246, 0.2);
+            padding: 50px 60px 30px;
+        }
 
-.footer-content {
-    max-width: 1400px;
-    margin: 0 auto;
-}
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
 
-.footer-grid {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
-    gap: 50px;
-    margin-bottom: 40px;
-}
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 50px;
+            margin-bottom: 40px;
+        }
 
-.footer-section h3 {
-    font-size: 18px;
-    font-weight: 700;
-    margin-bottom: 15px;
-    background: linear-gradient(135deg, var(--electric-cyan), var(--soft-lavender));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
+        .footer-section h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #3b82f6, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
-.footer-section p {
-    color: rgba(255, 255, 255, 0.6);
-    font-size: 14px;
-    line-height: 1.8;
-}
+        .footer-section p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+            line-height: 1.8;
+        }
 
-.footer-links {
-    list-style: none;
-}
+        .footer-links {
+            list-style: none;
+        }
 
-.footer-links li {
-    margin-bottom: 12px;
-}
+        .footer-links li {
+            margin-bottom: 12px;
+        }
 
-.footer-links a {
-    color: rgba(255, 255, 255, 0.6);
-    text-decoration: none;
-    font-size: 14px;
-    transition: all 0.3s;
-}
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
 
-.footer-links a:hover {
-    color: var(--electric-cyan);
-    transform: translateX(5px);
-    display: inline-block;
-}
+        .footer-links a:hover {
+            color: #3b82f6;
+            transform: translateX(5px);
+            display: inline-block;
+        }
 
-.footer-bottom {
-    border-top: 1px solid rgba(59, 130, 246, 0.2);
-    padding-top: 25px;
-    text-align: center;
-    color: rgba(255, 255, 255, 0.5);
-    font-size: 14px;
-}
+        .footer-bottom {
+            border-top: 1px solid rgba(59, 130, 246, 0.2);
+            padding-top: 25px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 14px;
+        }
+        
         #toast {
             visibility: hidden; min-width: 300px; background: linear-gradient(135deg, #10b981, #059669); color: white;
             text-align: center; padding: 16px 24px; border-radius: 10px; position: fixed;
@@ -212,6 +233,9 @@
             opacity: 0; transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         }
         #toast.show { visibility: visible; opacity: 1; top: 30px; }
+        #toast.error {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
 
         @media (max-width: 768px) {
             .header-content { flex-direction: column; gap: 15px; }
@@ -252,12 +276,18 @@
     <div class="container">
         <h1>✏️ Create New Post</h1>
         <p class="subtitle">Share your story with the world</p>
-        <form method="post" action="/create-post" enctype="multipart/form-data" id="postForm">
-            <label for="title">Post Title</label>
-            <input type="text" name="title" id="title" maxlength="100" placeholder="Enter your post title" required>
+        <form method="post" action="/create-post" enctype="multipart/form-data" id="postForm" novalidate>
+            <div class="form-group">
+                <label for="title">Post Title</label>
+                <input type="text" name="title" id="title" maxlength="100" placeholder="Enter your post title">
+                <span class="error-message" id="titleError"></span>
+            </div>
             
-            <label for="content">Post Content</label>
-            <textarea name="content" id="content" placeholder="Write your content here..." required></textarea>
+            <div class="form-group">
+                <label for="content">Post Content</label>
+                <textarea name="content" id="content" placeholder="Write your content here..."></textarea>
+                <span class="error-message" id="contentError"></span>
+            </div>
             
             <div class="image-upload-section">
                 <label>Featured Image (Optional)</label>
@@ -310,6 +340,11 @@
 const uploadArea = document.getElementById('uploadArea');
 const imageInput = document.getElementById('imageInput');
 const postForm = document.getElementById('postForm');
+const titleInput = document.getElementById('title');
+const contentInput = document.getElementById('content');
+const titleError = document.getElementById('titleError');
+const contentError = document.getElementById('contentError');
+const toast = document.getElementById('toast');
 
 uploadArea.addEventListener('click', () => imageInput.click());
 
@@ -320,12 +355,94 @@ imageInput.addEventListener('change', (e) => {
     }
 });
 
+function validateTitle() {
+    const value = titleInput.value.trim();
+    
+    if (value === '') {
+        showError(titleInput, titleError, 'Post title is required');
+        return false;
+    } else if (value.length < 5) {
+        showError(titleInput, titleError, 'Title must be at least 5 characters long');
+        return false;
+    } else {
+        showSuccess(titleInput, titleError);
+        return true;
+    }
+}
+
+function validateContent() {
+    const value = contentInput.value.trim();
+    
+    if (value === '') {
+        showError(contentInput, contentError, 'Post content is required');
+        return false;
+    } else if (value.length < 20) {
+        showError(contentInput, contentError, 'Content must be at least 20 characters long');
+        return false;
+    } else {
+        showSuccess(contentInput, contentError);
+        return true;
+    }
+}
+
+function showError(input, errorElement, message) {
+    input.classList.add('error');
+    input.classList.remove('success');
+    errorElement.textContent = message;
+}
+
+function showSuccess(input, errorElement) {
+    input.classList.remove('error');
+    input.classList.add('success');
+    errorElement.textContent = '';
+}
+
+function showToast(message, isError = false) {
+    toast.textContent = message;
+    toast.classList.remove('error');
+    if (isError) {
+        toast.classList.add('error');
+    }
+    toast.classList.add('show');
+    
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, 3000);
+}
+
+
+titleInput.addEventListener('blur', validateTitle);
+contentInput.addEventListener('blur', validateContent);
+
+
 postForm.addEventListener('submit', function(e) {
     e.preventDefault();
-    const toast = document.getElementById('toast');
-    toast.textContent = 'Publishing post... ✅';
-    toast.classList.add('show');
-    setTimeout(() => postForm.submit(), 800);
+    
+
+    const isTitleValid = validateTitle();
+    const isContentValid = validateContent();
+    
+    if (isTitleValid && isContentValid) {
+        showToast('Publishing post... ✅');
+        
+        setTimeout(() => {
+            postForm.submit();
+        }, 800);
+    } 
+});
+
+titleInput.addEventListener('input', function() {
+    if (titleInput.classList.contains('error')) {
+        titleInput.classList.remove('error');
+        titleError.textContent = '';
+    }
+});
+
+contentInput.addEventListener('input', function() {
+    if (contentInput.classList.contains('error')) {
+        contentInput.classList.remove('error');
+        contentError.textContent = '';
+    }
 });
 </script>
 

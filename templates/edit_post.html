@@ -240,6 +240,34 @@ textarea:focus {
     box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
 }
 
+input.error,
+textarea.error {
+    border-color: #ef4444;
+    background: rgba(239, 68, 68, 0.1);
+}
+
+input.success,
+textarea.success {
+    border-color: #10b981;
+    background: rgba(16, 185, 129, 0.05);
+}
+
+.error-message {
+    display: block;
+    color: #ef4444;
+    font-size: 13px;
+    margin-top: 6px;
+    font-weight: 500;
+    min-height: 20px;
+    animation: shake 0.3s ease;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
 textarea {
     min-height: 280px;
     resize: vertical;
@@ -429,7 +457,7 @@ input[type="file"] {
     box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
 }
 
-.submit-btn:hover {
+.submit-btn:hover:not(:disabled) {
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
 }
@@ -438,7 +466,12 @@ input[type="file"] {
     transform: translateY(0);
 }
 
-/* ===== TOAST ===== */
+.submit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* ===== TOAST (only for success/info messages) ===== */
 #toast {
     visibility: hidden;
     min-width: 320px;
@@ -471,10 +504,6 @@ input[type="file"] {
 
 #toast.warning {
     background: linear-gradient(135deg, #f59e0b, #d97706);
-}
-
-#toast.error {
-    background: linear-gradient(135deg, #ef4444, #dc2626);
 }
 
 /* ===== MODAL ===== */
@@ -722,7 +751,7 @@ footer {
             <p>Make your changes and update your story</p>
         </div>
 
-        <form method="POST" action="/post/{{ post.id }}/edit" enctype="multipart/form-data" id="editForm">
+        <form method="POST" action="/post/{{ post.id }}/edit" enctype="multipart/form-data" id="editForm" novalidate>
             
             <!-- TITLE INPUT -->
             <div class="form-group">
@@ -738,8 +767,8 @@ footer {
                     value="{{ post.title }}" 
                     maxlength="100"
                     placeholder="Enter an engaging title for your post"
-                    required
                 >
+                <span class="error-message" id="titleError"></span>
             </div>
 
             <!-- CONTENT TEXTAREA -->
@@ -753,8 +782,8 @@ footer {
                     name="content" 
                     id="contentInput"
                     placeholder="Share your story, ideas, or insights..."
-                    required
                 >{{ post.content }}</textarea>
+                <span class="error-message" id="contentError"></span>
             </div>
 
             <!-- IMAGE SECTION -->
@@ -853,12 +882,16 @@ footer {
 </div>
 
 <script>
-// Character/Word Counters
+// Form elements
 const titleInput = document.getElementById('titleInput');
 const contentInput = document.getElementById('contentInput');
 const titleCounter = document.getElementById('titleCounter');
 const contentCounter = document.getElementById('contentCounter');
+const titleError = document.getElementById('titleError');
+const contentError = document.getElementById('contentError');
+const editForm = document.getElementById('editForm');
 
+// Character/Word Counters
 function updateTitleCounter() {
     const length = titleInput.value.length;
     titleCounter.textContent = `${length}/100`;
@@ -877,11 +910,69 @@ function updateContentCounter() {
 titleInput.addEventListener('input', updateTitleCounter);
 contentInput.addEventListener('input', updateContentCounter);
 
-// Initialize counters
 updateTitleCounter();
 updateContentCounter();
 
-// Toast notification
+function validateTitle() {
+    const value = titleInput.value.trim();
+    
+    if (value === '') {
+        showError(titleInput, titleError, 'Post title is required');
+        return false;
+    } else if (value.length < 5) {
+        showError(titleInput, titleError, 'Title must be at least 5 characters long');
+        return false;
+    } else {
+        showSuccess(titleInput, titleError);
+        return true;
+    }
+}
+
+function validateContent() {
+    const value = contentInput.value.trim();
+    
+    if (value === '') {
+        showError(contentInput, contentError, 'Post content is required');
+        return false;
+    } else if (value.length < 20) {
+        showError(contentInput, contentError, 'Content must be at least 20 characters long');
+        return false;
+    } else {
+        showSuccess(contentInput, contentError);
+        return true;
+    }
+}
+
+function showError(input, errorElement, message) {
+    input.classList.add('error');
+    input.classList.remove('success');
+    errorElement.textContent = message;
+}
+
+function showSuccess(input, errorElement) {
+    input.classList.remove('error');
+    input.classList.add('success');
+    errorElement.textContent = '';
+}
+
+// Clear error messages when user starts typing
+titleInput.addEventListener('input', function() {
+    if (titleInput.classList.contains('error')) {
+        titleInput.classList.remove('error');
+        titleError.textContent = '';
+    }
+    updateTitleCounter();
+});
+
+contentInput.addEventListener('input', function() {
+    if (contentInput.classList.contains('error')) {
+        contentInput.classList.remove('error');
+        contentError.textContent = '';
+    }
+    updateContentCounter();
+});
+
+// Toast notification (only for success/info, not validation errors)
 function showToast(message, type = 'success') {
     const toast = document.getElementById('toast');
     toast.textContent = message;
@@ -899,7 +990,7 @@ function previewImage(event) {
     
     // Validate file size (5MB)
     if (file.size > 5 * 1024 * 1024) {
-        showToast('Image size must be less than 5MB', 'error');
+        showToast('Image size must be less than 5MB', 'warning');
         event.target.value = '';
         return;
     }
@@ -932,8 +1023,7 @@ function previewImage(event) {
             `;
             currentImageSection.parentNode.insertBefore(imageActions, document.getElementById('imageInput'));
         }
-        
-        // Remove upload area if it exists
+
         const uploadArea = document.getElementById('uploadArea');
         if (uploadArea) uploadArea.remove();
         
@@ -975,32 +1065,32 @@ function confirmRemoveImage() {
     showToast('Image marked for removal ⚠️', 'warning');
 }
 
-// Form submission
-const editForm = document.getElementById('editForm');
+// Form submission with validation
 editForm.addEventListener('submit', function(e) {
     e.preventDefault();
     
-    // Validate form
-    if (!titleInput.value.trim()) {
-        showToast('Please enter a title', 'error');
-        titleInput.focus();
-        return;
+    // Validate all fields
+    const isTitleValid = validateTitle();
+    const isContentValid = validateContent();
+    
+    // Check if all validations passed
+    if (isTitleValid && isContentValid) {
+        showToast('Updating your post... ⏳', 'success');
+        
+        setTimeout(() => {
+            editForm.submit();
+        }, 800);
+    } else {
+        // Scroll to first error
+        const firstError = document.querySelector('.error');
+        if (firstError) {
+            firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            firstError.focus();
+        }
     }
-    
-    if (!contentInput.value.trim()) {
-        showToast('Please enter some content', 'error');
-        contentInput.focus();
-        return;
-    }
-    
-    showToast('Updating your post... ⏳', 'success');
-    
-    setTimeout(() => {
-        editForm.submit();
-    }, 800);
 });
 
-// Close modal on Escape key
+// Keyboard shortcuts
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
         closeConfirm();

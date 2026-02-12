@@ -18,9 +18,10 @@ class Post(Base):
     author = relationship("User", back_populates="posts")
     comments = relationship(
         "Comment",
-        primaryjoin="and_(Comment.post_id==Post.id, Comment.deleted_at==None)",
+        primaryjoin="and_(Comment.post_id==Post.id, Comment.deleted_at==None)",order_by="desc(Comment.created_at)",
         back_populates="post",
     )
+
     def to_dict(self):
         return {
             "id": self.id,

@@ -417,10 +417,8 @@
 </head>
 <body>
 
-<!-- TOAST -->
 <div id="toast"></div>
 
-<!-- HEADER -->
 <header>
     <div class="header-content">
         <a href="/" class="logo-container">
@@ -445,7 +443,6 @@
     </div>
 </header>
 
-<!-- MAIN CONTENT -->
 <main>
     <div class="login-container">
         <a href="/" class="back-link">← Back to Home</a>
@@ -458,36 +455,36 @@
         <form id="loginForm" method="POST" action="/login" novalidate>
             <div class="form-group">
                 <label for="identifier">Username or Email</label>
-    <input 
-    type="text" 
-    name="identifier" 
-    id="identifier" 
-    placeholder="Enter your username or email"
-    autocomplete="username"
-    value="{{ values.identifier if values else '' }}"
->
+                <input 
+                    type="text" 
+                    name="identifier" 
+                    id="identifier" 
+                    placeholder="Enter your username or email"
+                    autocomplete="username"
+                    value="{{ values.identifier if values else '' }}"
+                >
                 <span class="error-message" id="identifierError"></span>
             </div>
-              <div class="form-group">
-    <label for="password">Password</label>
-    <div class="input-wrapper">
-        <input 
-            type="password" 
-            name="password" 
-            id="password" 
-            placeholder="Enter your password"
-            autocomplete="current-password"
-            value="{{ values.identifier if values else '' }}"
-        >
-        <span class="toggle-password" onclick="togglePassword()">show</span>
-    </div>
-    <span class="error-message" id="passwordError"></span>
-</div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <div class="input-wrapper">
+                    <input 
+                        type="password" 
+                        name="password" 
+                        id="password" 
+                        placeholder="Enter your password"
+                        autocomplete="current-password"
+                        value="{{ values.password if values else '' }}"
+                    >
+                    <span class="toggle-password" onclick="togglePassword()">show</span>
+                </div>
+                <span class="error-message" id="passwordError"></span>
+            </div>
+            <div id="generalError" class="error-message" style="text-align: center; font-size: 14px; margin-bottom: 10px; font-weight: 600;"></div>
 
-<!-- Add this general error message div -->
-<div id="generalError" class="error-message" style="text-align: center; font-size: 14px; margin-bottom: 10px; font-weight: 600;"></div>
-
-<button type="submit" class="login-btn">🚀 Log In</button>
+            <button type="submit" class="login-btn">🚀 Log In</button>
+        </form>
 
         <div class="divider"><span>OR</span></div>
 
@@ -586,23 +583,6 @@ function validatePassword() {
 identifier.addEventListener("input", validateIdentifier);
 password.addEventListener("input", validatePassword);
 
-// Traditional form submission
-loginForm.addEventListener("submit", function(e) {
-    // Clear previous general error
-    generalError.textContent = "";
-    
-    const validIdentifier = validateIdentifier();
-    const validPassword = validatePassword();
-
-    if (!validIdentifier || !validPassword) {
-        e.preventDefault();
-        return false;
-    }
-    
-    // Let form submit normally to backend
-    return true;
-});
-
 function togglePassword() {
     const passwordInput = document.getElementById('password');
     const toggleBtn = document.querySelector('.toggle-password');
@@ -615,9 +595,46 @@ function togglePassword() {
         toggleBtn.textContent = 'show';
     }
 }
-</script>
+window.addEventListener('DOMContentLoaded', function() {
+    const isFormSubmission = sessionStorage.getItem('formSubmitted');
+    sessionStorage.removeItem('formSubmitted');
+    if (!isFormSubmission) {
+        identifier.value = '';
+        password.value = '';
+        identifierError.textContent = '';
+        passwordError.textContent = '';
+        generalError.textContent = '';
+    }
+    
+    const hasErrors = generalError.textContent.trim() !== '' || 
+                      identifierError.textContent.trim() !== '' || 
+                      passwordError.textContent.trim() !== '';
+    
+    if (hasErrors && isFormSubmission) {
 
+        if (identifierError.textContent.trim() !== '') {
+            identifier.focus();
+        } else if (passwordError.textContent.trim() !== '') {
+            password.focus();
+        } else {
+            identifier.focus();
+        }
+    }
+});
+loginForm.addEventListener("submit", function(e) {
+    sessionStorage.setItem('formSubmitted', 'true');
+    generalError.textContent = "";
+    const validIdentifier = validateIdentifier();
+    const validPassword = validatePassword();
 
+    if (!validIdentifier || !validPassword) {
+        e.preventDefault();
+        sessionStorage.removeItem('formSubmitted'); 
+        return false;
+    }
+
+    return true;
+});</script>
 
 </body>
 </html>

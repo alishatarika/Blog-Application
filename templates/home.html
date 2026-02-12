@@ -432,6 +432,7 @@
             display: flex;
             gap: 8px;
             margin-bottom: 15px;
+            flex-direction: column;
         }
 
         .comment-input {
@@ -446,10 +447,41 @@
             transition: all 0.3s ease;
         }
 
+        .comment-input.error {
+            border-color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .comment-input.success {
+            border-color: #10b981;
+            background: rgba(16, 185, 129, 0.05);
+        }
+
         .comment-input:focus {
             outline: none;
             border-color: #3b82f6;
             background: rgba(59, 130, 246, 0.05);
+        }
+
+        .error-message {
+            display: block;
+            color: #ef4444;
+            font-size: 12px;
+            margin-top: 4px;
+            font-weight: 500;
+            min-height: 18px;
+            animation: shake 0.3s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .comment-form-actions {
+            display: flex;
+            gap: 8px;
         }
 
         .comment-btn {
@@ -465,9 +497,14 @@
             transition: all 0.3s ease;
         }
 
-        .comment-btn:hover {
+        .comment-btn:hover:not(:disabled) {
             transform: translateY(-2px);
             box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+        }
+
+        .comment-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
         }
 
         .comment-list {
@@ -729,33 +766,6 @@
             box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
         }
 
-        /* ===== TOAST ===== */
-        .toast {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            padding: 16px 26px;
-            background: #10b981;
-            color: white;
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 14px;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.3s ease;
-            z-index: 3000;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-        }
-
-        .toast.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .toast.error {
-            background: #ef4444;
-        }
-
         footer {
     background: rgba(26,31,58,0.7);
     backdrop-filter: blur(20px);
@@ -903,13 +913,10 @@
 <main>
     <div class="container">
         <h1 class="page-title">📚 All Blog Posts</h1>
-
-        <!-- Posts Grid -->
         <div class="posts-grid" id="postsContainer">
         {% if posts %}
             {% for post in posts %}
                 <div class="post-card" data-post-id="{{ post.id }}">
-                    <!-- Post Image -->
                     <a href="/post/{{ post.id }}" class="post-image-link">
                     <div class="post-image-container">
                         {% if post.image_url %}
@@ -918,6 +925,7 @@
                         <div class="post-no-image">📝</div>
                         {% endif %}
                     </div>
+                    </a>
 
                     <!-- Post Body -->
                     <div class="post-body">
@@ -953,9 +961,12 @@
 
                             <div class="comments-content" id="comments-{{ post.id }}">
                                 {% if current_user %}
-                                <form method="POST" action="/post/{{ post.id }}/comment" class="comment-form">
-                                    <input type="text" name="comment_text" class="comment-input" placeholder="Add a comment..." required>
-                                    <button type="submit" class="comment-btn">Post</button>
+                                <form method="POST" action="/post/{{ post.id }}/comment" class="comment-form" data-post-id="{{ post.id }}" novalidate>
+                                    <input type="text" name="comment_text" class="comment-input" id="comment-input-{{ post.id }}" placeholder="Add a comment...">
+                                    <span class="error-message" id="comment-error-{{ post.id }}"></span>
+                                    <div class="comment-form-actions">
+                                        <button type="submit" class="comment-btn">Submit</button>
+                                    </div>
                                 </form>
                                 {% else %}
                                 <div class="login-prompt">
@@ -997,11 +1008,10 @@
         <!-- PAGINATION -->
         {% if posts %}
         <div class="pagination">
-            <button class="page-btn" onclick="changePage(1)" id="firstPage">First</button>
             <button class="page-btn" onclick="changePage(currentPage - 1)" id="prevPage">Previous</button>
             <span class="page-info">Page <span id="pageNumber">1</span> of <span id="totalPages">1</span></span>
             <button class="page-btn" onclick="changePage(currentPage + 1)" id="nextPage">Next</button>
-            <button class="page-btn" onclick="changePage(totalPages)" id="lastPage">Last</button>
+
         </div>
         {% endif %}
     </div>
@@ -1017,10 +1027,6 @@
             <button class="modal-btn modal-btn-confirm" onclick="confirmDelete()">Delete</button>
         </div>
     </div>
-</div>
-
-<div id="toast" class="toast">
-    <span id="toastMessage"></span>
 </div>
 
 <!-- FOOTER -->
@@ -1050,7 +1056,7 @@
 
 <script>
     // Pagination variables
-    const POSTS_PER_PAGE = 12;
+    const POSTS_PER_PAGE = 4;
     let currentPage = 1;
     let totalPages = 1;
     let allPosts = [];
@@ -1058,6 +1064,7 @@
     // Initialize on page load
     document.addEventListener('DOMContentLoaded', function() {
         initializePagination();
+        initializeCommentValidation();
         
         if (window.history.replaceState) {
             window.history.replaceState(null, null, window.location.href);
@@ -1100,10 +1107,8 @@
     }
 
     function updatePaginationButtons() {
-        document.getElementById('firstPage').disabled = currentPage === 1;
         document.getElementById('prevPage').disabled = currentPage === 1;
         document.getElementById('nextPage').disabled = currentPage === totalPages;
-        document.getElementById('lastPage').disabled = currentPage === totalPages;
     }
 
     function toggleComments(postId) {
@@ -1117,6 +1122,66 @@
             commentsContent.classList.add('show');
             toggleButton.classList.add('active');
         }
+    }
+
+    // Comment validation
+    function initializeCommentValidation() {
+        const commentForms = document.querySelectorAll('.comment-form');
+        
+        commentForms.forEach(form => {
+            const postId = form.getAttribute('data-post-id');
+            const input = document.getElementById(`comment-input-${postId}`);
+            const errorElement = document.getElementById(`comment-error-${postId}`);
+            
+            // Clear error when typing
+            input.addEventListener('input', function() {
+                if (input.classList.contains('error')) {
+                    input.classList.remove('error');
+                    errorElement.textContent = '';
+                }
+            });
+            
+            // Validate on submit
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                if (validateComment(input, errorElement)) {
+                    form.submit();
+                } else {
+                    input.focus();
+                }
+            });
+        });
+    }
+
+    function validateComment(input, errorElement) {
+        const value = input.value.trim();
+        
+        if (value === '') {
+            showError(input, errorElement, 'Comment cannot be empty');
+            return false;
+        } else if (value.length < 2) {
+            showError(input, errorElement, 'Comment must be at least 2 characters');
+            return false;
+        } else if (value.length > 500) {
+            showError(input, errorElement, 'Comment must be less than 500 characters');
+            return false;
+        } else {
+            showSuccess(input, errorElement);
+            return true;
+        }
+    }
+
+    function showError(input, errorElement, message) {
+        input.classList.add('error');
+        input.classList.remove('success');
+        errorElement.textContent = message;
+    }
+
+    function showSuccess(input, errorElement) {
+        input.classList.remove('error');
+        input.classList.add('success');
+        errorElement.textContent = '';
     }
 
     let deleteType = null;
@@ -1157,18 +1222,6 @@
         closeModal();
     }
 
-    function showToast(message, type = 'success') {
-        const toast = document.getElementById('toast');
-        const toastMessage = document.getElementById('toastMessage');
-        
-        toastMessage.textContent = message;
-        toast.className = `toast active ${type}`;
-        
-        setTimeout(() => {
-            toast.classList.remove('active');
-        }, 3500);
-    }
-
     document.getElementById('deleteModal').addEventListener('click', function(e) {
         if (e.target === this) {
             closeModal();
@@ -1180,13 +1233,6 @@
             closeModal();
         }
     });
-
-    {% if success_message %}
-        showToast("{{ success_message }}", "success");
-    {% endif %}
-    {% if error_message %}
-        showToast("{{ error_message }}", "error");
-    {% endif %}
 </script>
 
 </body>

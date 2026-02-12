@@ -10,7 +10,6 @@ from app.helper.dependencies import get_current_user_optional
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 
-
 def render_login_template(
     request: Request,
     errors: dict = None,
@@ -40,7 +39,6 @@ def welcome_page(request: Request, user=Depends(get_current_user_optional)):
         {"request": request, "current_user": user},
     )
 
-
 # ---------------- LOGIN PAGE ----------------
 @router.get("/login", response_class=HTMLResponse)
 def login_page(request: Request, user=Depends(get_current_user_optional)):
@@ -69,12 +67,9 @@ def login_user(
     remember: bool = Form(False),
     db: Session = Depends(get_db),
 ):
-    """
-    Handle user login with proper error handling and data preservation.
-    Preserves identifier (username/email) on error but never sends password back.
-    """
+    
     errors = {}
-    values = {"identifier": identifier}  
+    values = {"identifier": identifier,"password":password}  
 
     try:
         if not identifier or not identifier.strip():

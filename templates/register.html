@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <title>Register | MyBlog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     
     <style>
@@ -202,12 +205,7 @@
             font-size: 12px;
             margin-top: 5px;
             min-height: 18px;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .error-message.show {
-            opacity: 1;
+            display: block;
         }
 
         .success-message {
@@ -215,12 +213,7 @@
             font-size: 12px;
             margin-top: 5px;
             min-height: 18px;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .success-message.show {
-            opacity: 1;
+            display: block;
         }
 
         button {
@@ -335,10 +328,13 @@
             margin-left: 8px;
             opacity: 0.7;
             transition: opacity 0.2s;
+            width: auto;
+            margin-top: 0;
         }
 
         .toast-close:hover {
             opacity: 1;
+            transform: none;
         }
 
         /* ===== OTP SECTION ===== */
@@ -381,10 +377,12 @@
             font-size: 13px;
             padding: 0;
             margin-top: 0;
+            width: auto;
         }
 
         .resend-link button:hover {
             color: #2563eb;
+            transform: none;
         }
 
         .hidden {
@@ -414,7 +412,7 @@
     font-size: 18px;
     font-weight: 700;
     margin-bottom: 15px;
-    background: linear-gradient(135deg, var(--electric-cyan), var(--soft-lavender));
+    background: linear-gradient(135deg, #3b82f6, #a855f7);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -441,7 +439,7 @@
 }
 
 .footer-links a:hover {
-    color: var(--electric-cyan);
+    color: #3b82f6;
     transform: translateX(5px);
     display: inline-block;
 }
@@ -473,6 +471,11 @@
                 bottom: 20px;
                 right: 20px;
                 left: 20px;
+            }
+            
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
             }
         }
     </style>
@@ -508,9 +511,7 @@
         <a href="/" class="back-link">← Back to Home</a>
         
         <h2 id="formTitle">{% if show_otp %}Verify Email{% else %}Create Account{% endif %}</h2>
-
-        <!-- REGISTRATION FORM -->
-        <form id="registerForm" method="POST" action="/register" novalidate class="{% if show_otp %}hidden{% endif %}">
+        <form id="registerForm" method="POST" action="/register" novalidate autocomplete="off" class="{% if show_otp %}hidden{% endif %}">
             <div class="form-group">
                 <label for="username">Username</label>
                 <input 
@@ -519,10 +520,9 @@
                     id="username" 
                     placeholder="Choose a username"
                     value="{{ values.username if values else '' }}"
+                    autocomplete="off"
                 >
-                <div class="error-message" id="usernameError">
-                    {% if errors and errors.username %}{{ errors.username }}{% endif %}
-                </div>
+                <span class="error-message" id="usernameError"></span>
             </div>
 
             <div class="form-group">
@@ -533,44 +533,34 @@
                     id="email" 
                     placeholder="Enter your email"
                     value="{{ values.email if values else '' }}"
+                    autocomplete="off"
                 >
-                <div class="error-message" id="emailError">
-                    {% if errors and errors.email %}{{ errors.email }}{% endif %}
-                </div>
+                <span class="error-message" id="emailError"></span>
             </div>
 
             <div class="form-group password-wrapper">
                 <label for="password">Password</label>
-                <input type="password" name="password" id="password" placeholder="Create a password"value="{{ values.email if values else '' }}">
-                <span class="toggle-label" onclick="togglePassword('password')">show</span>
-                <div class="error-message" id="passwordError">
-                    {% if errors and errors.password %}{{ errors.password }}{% endif %}
-                </div>
+                <input type="password" name="password" id="password" placeholder="Create a password" value="{{ values.password if values else '' }}" autocomplete="off">
+                <span class="toggle-label" onclick="togglePassword('password', this)">show</span>
+                <span class="error-message" id="passwordError"></span>
             </div>
 
             <div class="form-group password-wrapper">
                 <label for="confirm_password">Confirm Password</label>
-                <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm your password"value="{{ values.email if values else '' }}">
-                <span class="toggle-label" onclick="togglePassword('confirm_password')">show</span>
-                <div class="error-message" id="confirmPasswordError">
-                    {% if errors and errors.confirm_password %}{{ errors.confirm_password }}{% endif %}
-                </div>
+                <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm your password" value="{{ values.confirm_password if values else '' }}" autocomplete="off">
+                <span class="toggle-label" onclick="togglePassword('confirm_password', this)">show</span>
+                <span class="error-message" id="confirmPasswordError"></span>
             </div>
 
             <button type="submit">Send Verification Code</button>
         </form>
-
-        <!-- OTP VERIFICATION FORM -->
-        <form id="otpForm" method="POST" action="/verify-otp" class="{% if not show_otp %}hidden{% endif %}">
+        
+        <form id="otpForm" method="POST" action="/verify-otp" autocomplete="off" class="{% if not show_otp %}hidden{% endif %}">
             <div class="otp-info">
                 <strong>📧 Verification Code Sent!</strong><br>
-                We've sent a 6-digit code to <strong>{{ values.email if values else '' }}</strong>. 
+                We've sent a 6-digit code to <strong id="otpEmailDisplay">{{ values.email if values else '' }}</strong>. 
                 Please check your email and enter the code below. The code will expire in 5 minutes.
             </div>
-
-            <input type="hidden" name="email" value="{{ values.email if values else '' }}">
-            <input type="hidden" name="username" value="{{ user_data.username if user_data else '' }}">
-            <input type="hidden" name="password" value="{{ user_data.password if user_data else '' }}">
 
             <div class="form-group">
                 <label for="otp">Verification Code</label>
@@ -583,13 +573,10 @@
                     maxlength="6"
                     pattern="[0-9]{6}"
                     autocomplete="off"
+                    inputmode="numeric"
                 >
-                <div class="error-message" id="otpError">
-                    {% if errors and errors.otp %}{{ errors.otp }}{% endif %}
-                </div>
-                <div class="success-message" id="otpSuccess">
-                    {% if errors and errors.success %}{{ errors.success }}{% endif %}
-                </div>
+                <span class="error-message" id="otpError"></span>
+                <span class="success-message" id="otpSuccess"></span>
             </div>
 
             <button type="submit">Verify & Create Account</button>
@@ -619,12 +606,10 @@
     <div class="footer-content">
         <div class="footer-grid">
             <div class="footer-section">
-                <h3>MyBlog</h3>
                 <p>A modern platform for writers, thinkers, and creators to share their stories with the world. Join our community and start publishing today.</p>
             </div>
             
             <div class="footer-section">
-                <h3>Quick Links</h3>
                 <ul class="footer-links">
                     <li><a href="/">Home</a></li>
                     <li><a href="/read">Browse Posts</a></li>
@@ -638,279 +623,80 @@
     </div>
 </footer>
 
-<script>
-function togglePassword(id) {
-    const input = document.getElementById(id);
-    const label = input.nextElementSibling;
 
+{% if errors and errors.username %}
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("usernameError").textContent = "{{ errors.username }}";
+});
+</script>
+{% endif %}
+
+{% if errors and errors.email %}
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("emailError").textContent = "{{ errors.email }}";
+});
+</script>
+{% endif %}
+
+{% if errors and errors.password %}
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("passwordError").textContent = "{{ errors.password }}";
+});
+</script>
+{% endif %}
+
+{% if errors and errors.confirm_password %}
+<script>
+document.addEventListener("DOMContentLoading", function() {
+    document.getElementById("confirmPasswordError").textContent = "{{ errors.confirm_password }}";
+});
+</script>
+{% endif %}
+
+{% if errors and errors.otp %}
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("otpError").textContent = "{{ errors.otp }}";
+});
+</script>
+{% endif %}
+
+<script>
+function togglePassword(id, el) {
+    const input = document.getElementById(id);
     if (input.type === "password") {
         input.type = "text";
-        label.textContent = "Hide";
+        el.textContent = "hide";
     } else {
         input.type = "password";
-        label.textContent = "Show";
+        el.textContent = "show";
     }
 }
 
-const form = document.getElementById("registerForm");
-const username = document.getElementById("username");
-const email = document.getElementById("email");
-const password = document.getElementById("password");
-const confirmPassword = document.getElementById("confirm_password");
-const usernameError = document.getElementById("usernameError");
-const emailError = document.getElementById("emailError");
-const passwordError = document.getElementById("passwordError");
-const confirmPasswordError = document.getElementById("confirmPasswordError");
-const otpInput = document.getElementById("otp");
-const otpError = document.getElementById("otpError");
-const otpSuccess = document.getElementById("otpSuccess");
-
-const touchedFields = {
-    username: false,
-    email: false,
-    password: false,
-    confirmPassword: false
-};
-
-window.addEventListener("DOMContentLoaded", () => {
-    // Show server errors for registration form
-    if (username && usernameError) showServerError(username, usernameError);
-    if (email && emailError) showServerError(email, emailError);
-    if (password && passwordError) showServerError(password, passwordError);
-    if (confirmPassword && confirmPasswordError) showServerError(confirmPassword, confirmPasswordError);
-    
-    // Show server errors for OTP
-    if (otpError && otpError.textContent.trim() !== "") {
-        otpError.classList.add("show");
-    }
-    
-    // Show success message for OTP
-    if (otpSuccess && otpSuccess.textContent.trim() !== "") {
-        otpSuccess.classList.add("show");
-    }
-    
-    // Auto-focus OTP input if on OTP step
-    if (otpInput && !otpInput.closest('form').classList.contains('hidden')) {
-        otpInput.focus();
-    }
-});
-
-function showServerError(input, errorBox) {
-    if (errorBox.textContent.trim() !== "") {
-        input.classList.add("error");
-        errorBox.classList.add("show");
-    }
-}
-
-function showError(input, errorBox, message) {
-    input.classList.remove("success");
-    input.classList.add("error");
-    errorBox.textContent = message;
-    errorBox.classList.add("show");
-}
-
-function clearError(input, errorBox) {
-    input.classList.remove("error");
-    input.classList.add("success");
-    errorBox.textContent = "";
-    errorBox.classList.remove("show");
-}
-
-function validateUsername() {
-    if (!username) return true;
-    const value = username.value.trim();
-
-    if (value === "") {
-        showError(username, usernameError, "Username is required");
-        return false;
-    }
-    if (value.length < 3) {
-        showError(username, usernameError, "Minimum 3 characters needed");
-        return false;
-    }
-    if (!/^[a-zA-Z0-9_]+$/.test(value)) {
-        showError(username, usernameError, "Only letters, numbers, underscore allowed");
-        return false;
-    }
-
-    clearError(username, usernameError);
-    return true;
-}
-
-function validateEmail() {
-    if (!email) return true;
-    const value = email.value.trim();
-
-    if (value === "") {
-        showError(email, emailError, "Email is required");
-        return false;
-    }
-    if (!/^[\w\.-]+@[\w\.-]+\.\w{2,}$/.test(value)) {
-        showError(email, emailError, "Invalid email format");
-        return false;
-    }
-
-    clearError(email, emailError);
-    return true;
-}
-
-function validatePassword() {
-    if (!password) return true;
-    const value = password.value;
-
-    if (value.length < 6) {
-        showError(password, passwordError, "At least 6 characters");
-        return false;
-    }
-    if (!/[A-Z]/.test(value)) {
-        showError(password, passwordError, "One uppercase letter required");
-        return false;
-    }
-    if (!/[a-z]/.test(value)) {
-        showError(password, passwordError, "One lowercase letter required");
-        return false;
-    }
-    if (!/\d/.test(value)) {
-        showError(password, passwordError, "One number required");
-        return false;
-    }
-    if (!/[!@#$%^&*(),.?":{}|<>_\-\\[\]=+;/`~]/.test(value)) {
-        showError(password, passwordError, "One special character required");
-        return false;
-    }
-    clearError(password, passwordError);
-    return true;
-}
-
-function validateConfirmPassword() {
-    if (!confirmPassword) return true;
-    if (confirmPassword.value !== password.value) {
-        showError(confirmPassword, confirmPasswordError, "Passwords do not match");
-        return false;
-    }
-
-    clearError(confirmPassword, confirmPasswordError);
-    return true;
-}
-
-if (username) {
-    username.addEventListener("input", () => {
-        touchedFields.username = true;
-        if (touchedFields.username) {
-            validateUsername();
-        }
-    });
-
-    username.addEventListener("blur", () => {
-        touchedFields.username = true;
-        validateUsername();
-    });
-}
-
-if (email) {
-    email.addEventListener("input", () => {
-        touchedFields.email = true;
-        if (touchedFields.email) {
-            validateEmail();
-        }
-    });
-
-    email.addEventListener("blur", () => {
-        touchedFields.email = true;
-        validateEmail();
-    });
-}
-
-if (password) {
-    password.addEventListener("input", () => {
-        touchedFields.password = true;
-        if (touchedFields.password) {
-            validatePassword();
-        }
-        if (touchedFields.confirmPassword && confirmPassword && confirmPassword.value !== "") {
-            validateConfirmPassword();
-        }
-    });
-
-    password.addEventListener("blur", () => {
-        touchedFields.password = true;
-        validatePassword();
-    });
-}
-
-if (confirmPassword) {
-    confirmPassword.addEventListener("input", () => {
-        touchedFields.confirmPassword = true;
-        if (touchedFields.confirmPassword) {
-            validateConfirmPassword();
-        }
-    });
-
-    confirmPassword.addEventListener("blur", () => {
-        touchedFields.confirmPassword = true;
-        validateConfirmPassword();
-    });
-}
-
-if (form) {
-    form.addEventListener("submit", (e) => {
-        touchedFields.username = true;
-        touchedFields.email = true;
-        touchedFields.password = true;
-        touchedFields.confirmPassword = true;
-
-        const isValid =
-            validateUsername() &&
-            validateEmail() &&
-            validatePassword() &&
-            validateConfirmPassword();
-
-        if (!isValid) {
-            e.preventDefault();
-        }
-    });
-}
-
-if (otpInput) {
-    otpInput.addEventListener("input", (e) => {
-        e.target.value = e.target.value.replace(/[^0-9]/g, '');
-    });
-}
-
-let toastTimeout = null;
-
-function showToast(message, type = 'success', duration = 5000) {
+function showToast(message, type = 'success') {
     const toast = document.getElementById('toast');
     const toastMessage = document.getElementById('toastMessage');
     
-    if (toastTimeout) {
-        clearTimeout(toastTimeout);
-    }
-    
     toastMessage.textContent = message;
-    toast.className = `toast active ${type}`;
+    toast.className = 'toast ' + type;
     
-    toastTimeout = setTimeout(() => {
+    setTimeout(() => {
+        toast.classList.add('active');
+    }, 100);
+    
+    setTimeout(() => {
         hideToast();
-    }, duration);
+    }, 5000);
 }
 
 function hideToast() {
     const toast = document.getElementById('toast');
     toast.classList.remove('active');
-    if (toastTimeout) {
-        clearTimeout(toastTimeout);
-    }
 }
 
-function toggleToast() {
-    const toast = document.getElementById('toast');
-    if (toast.classList.contains('active')) {
-        hideToast();
-    } else {
-        showToast('This is a sample message', 'info');
-    }
-}
 window.addEventListener('DOMContentLoaded', () => {
     const serverError = document.querySelector('.server-error');
     const serverSuccess = document.querySelector('.server-success');
@@ -922,21 +708,252 @@ window.addEventListener('DOMContentLoaded', () => {
     if (serverSuccess && serverSuccess.textContent.trim()) {
         showToast(serverSuccess.textContent.trim(), 'success', 6000);
     }
-});
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-        hideToast();
-    }
-});
-window.addEventListener('DOMContentLoaded', () => {
-    const body = document.body;
-    const successMessage = body.getAttribute('data-success-message');
-    if (successMessage) {
-        showToast(successMessage, 'success', 6000);
+    
+    const registerForm = document.getElementById('registerForm');
+    const otpForm = document.getElementById('otpForm');
+    const isOtpFormVisible = otpForm && !otpForm.classList.contains('hidden');
+    const isFormSubmission = sessionStorage.getItem('formSubmitted');
+    
+    sessionStorage.removeItem('formSubmitted');
+    
+    if (isOtpFormVisible) {
+        const otpInput = document.getElementById('otp');
+        const otpError = document.getElementById('otpError');
+        if (!isFormSubmission && otpError) {
+            otpError.textContent = '';
+        }
+        
+      
+        if (otpInput) {
+            otpInput.value = '';
+            otpInput.classList.remove('success');
+            setTimeout(() => {
+                otpInput.focus();
+            }, 100);
+        }
+    } else {
+        // Registration form is visible
+        const username = document.getElementById('username');
+        const email = document.getElementById('email');
+        const password = document.getElementById('password');
+        const confirmPassword = document.getElementById('confirm_password');
+        
+        const usernameError = document.getElementById('usernameError');
+        const emailError = document.getElementById('emailError');
+        const passwordError = document.getElementById('passwordError');
+        const confirmPasswordError = document.getElementById('confirmPasswordError');
+        
+        if (!isFormSubmission) {
+            if (username) username.value = '';
+            if (email) email.value = '';
+            if (password) password.value = '';
+            if (confirmPassword) confirmPassword.value = '';
+            
+            if (usernameError) usernameError.textContent = '';
+            if (emailError) emailError.textContent = '';
+            if (passwordError) passwordError.textContent = '';
+            if (confirmPasswordError) confirmPasswordError.textContent = '';
+        } else {
+            const hasErrors = (usernameError && usernameError.textContent.trim() !== '') ||
+                              (emailError && emailError.textContent.trim() !== '') ||
+                              (passwordError && passwordError.textContent.trim() !== '') ||
+                              (confirmPasswordError && confirmPasswordError.textContent.trim() !== '');
+            
+            if (hasErrors) {
+                if (usernameError && usernameError.textContent.trim() !== '' && username) {
+                    username.focus();
+                } else if (emailError && emailError.textContent.trim() !== '' && email) {
+                    email.focus();
+                } else if (passwordError && passwordError.textContent.trim() !== '' && password) {
+                    password.focus();
+                } else if (confirmPasswordError && confirmPasswordError.textContent.trim() !== '' && confirmPassword) {
+                    confirmPassword.focus();
+                }
+            }
+        }
     }
 });
 
+const form = document.getElementById("registerForm");
+const username = document.getElementById("username");
+const email = document.getElementById("email");
+const password = document.getElementById("password");
+const confirmPassword = document.getElementById("confirm_password");
+
+const usernameError = document.getElementById("usernameError");
+const emailError = document.getElementById("emailError");
+const passwordError = document.getElementById("passwordError");
+const confirmPasswordError = document.getElementById("confirmPasswordError");
+
+function validateUsername() {
+    if (!username) return true;
+    const val = username.value.trim();
+    if (val === "") {
+        usernameError.textContent = "Username is required.";
+        username.classList.add('error');
+        username.classList.remove('success');
+        return false;
+    }
+    if (val.length < 3) {
+        usernameError.textContent = "Minimum 3 characters required.";
+        username.classList.add('error');
+        username.classList.remove('success');
+        return false;
+    }
+    usernameError.textContent = "";
+    username.classList.remove('error');
+    username.classList.add('success');
+    return true;
+}
+
+function validateEmail() {
+    if (!email) return true;
+    const val = email.value.trim();
+    const pattern = /^[\w\.-]+@[\w\.-]+\.\w{2,}$/;
+    if (val === "") {
+        emailError.textContent = "Email is required.";
+        email.classList.add('error');
+        email.classList.remove('success');
+        return false;
+    }
+    if (!pattern.test(val)) {
+        emailError.textContent = "Invalid email format.";
+        email.classList.add('error');
+        email.classList.remove('success');
+        return false;
+    }
+    emailError.textContent = "";
+    email.classList.remove('error');
+    email.classList.add('success');
+    return true;
+}
+
+function validatePassword() {
+    if (!password) return true;
+    const val = password.value;
+    
+    if (val.length < 6) {
+        passwordError.textContent = "At least 6 characters required.";
+        password.classList.add('error');
+        password.classList.remove('success');
+        return false;
+    }
+    if (!/[A-Z]/.test(val)) {
+        passwordError.textContent = "One uppercase letter required.";
+        password.classList.add('error');
+        password.classList.remove('success');
+        return false;
+    }
+    if (!/[a-z]/.test(val)) {
+        passwordError.textContent = "One lowercase letter required.";
+        password.classList.add('error');
+        password.classList.remove('success');
+        return false;
+    }
+    if (!/\d/.test(val)) {
+        passwordError.textContent = "One number required.";
+        password.classList.add('error');
+        password.classList.remove('success');
+        return false;
+    }
+    if (!/[!@#$%^&*(),.?":{}|<>_\-\\[\]=+;/`~]/.test(val)) {
+        passwordError.textContent = "One special character required.";
+        password.classList.add('error');
+        password.classList.remove('success');
+        return false;
+    }
+    
+    passwordError.textContent = "";
+    password.classList.remove('error');
+    password.classList.add('success');
+    return true;
+}
+
+function validateConfirmPassword() {
+    if (!confirmPassword) return true;
+    if (confirmPassword.value.trim() === "") {
+        confirmPasswordError.textContent = "Please confirm your password.";
+        confirmPassword.classList.add('error');
+        confirmPassword.classList.remove('success');
+        return false;
+    }
+    if (confirmPassword.value !== password.value) {
+        confirmPasswordError.textContent = "Passwords do not match.";
+        confirmPassword.classList.add('error');
+        confirmPassword.classList.remove('success');
+        return false;
+    }
+    confirmPasswordError.textContent = "";
+    confirmPassword.classList.remove('error');
+    confirmPassword.classList.add('success');
+    return true;
+}
+
+if (username) username.addEventListener("input", validateUsername);
+if (email) email.addEventListener("input", validateEmail);
+if (password) password.addEventListener("input", () => {
+    validatePassword();
+    if (confirmPassword && confirmPassword.value.trim() !== "") {
+        validateConfirmPassword();
+    }
+});
+if (confirmPassword) confirmPassword.addEventListener("input", validateConfirmPassword);
+
+if (form) {
+    form.addEventListener("submit", function(e) {
+        sessionStorage.setItem('formSubmitted', 'true');
+        
+        const isUsernameValid = validateUsername();
+        const isEmailValid = validateEmail();
+        const isPasswordValid = validatePassword();
+        const isConfirmPasswordValid = validateConfirmPassword();
+        
+        const allValid = isUsernameValid && isEmailValid && isPasswordValid && isConfirmPasswordValid;
+
+        if (!allValid) {
+            e.preventDefault();
+            sessionStorage.removeItem('formSubmitted'); 
+            return false;
+        }
+        return true;
+    });
+}
+
+const otpInput = document.getElementById("otp");
+if (otpInput) {
+    otpInput.addEventListener("input", (e) => {
+        e.target.value = e.target.value.replace(/[^0-9]/g, '');
+        const otpError = document.getElementById('otpError');
+        if (otpError && e.target.value.length > 0) {
+            otpError.textContent = '';
+            e.target.classList.remove('error');
+        }
+    });
+    otpInput.addEventListener("paste", (e) => {
+        e.preventDefault();
+        const pastedText = (e.clipboardData || window.clipboardData).getData('text');
+        const numericOnly = pastedText.replace(/[^0-9]/g, '').substring(0, 6);
+        otpInput.value = numericOnly;
+    });
+}
+
+const otpForm = document.getElementById('otpForm');
+if (otpForm) {
+    otpForm.addEventListener('submit', function(e) {
+        sessionStorage.setItem('formSubmitted', 'true');
+        
+        const otpInput = document.getElementById('otp');
+        const otpError = document.getElementById('otpError');
+        
+        if (!otpInput.value || otpInput.value.length !== 6) {
+            e.preventDefault();
+            otpError.textContent = 'Please enter a valid 6-digit code';
+            otpInput.classList.add('error');
+            sessionStorage.removeItem('formSubmitted');
+            return false;
+        }
+    });
+}
 </script>
-
 </body>
 </html>

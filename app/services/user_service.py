@@ -7,19 +7,7 @@ from app.models.post import Post
 from app.models.comments import Comment
 from app.utils.hashing import verify_password
 
-
 def authenticate_user(db: Session, identifier: str, password: str):
-    """
-    Authenticate user by username or email.
-    
-    Args:
-        db: Database session
-        identifier: Username or email
-        password: Plain text password
-        
-    Returns:
-        User object if authentication successful, None otherwise
-    """
     try:
         user = (
             db.query(User)
@@ -53,16 +41,6 @@ def authenticate_user(db: Session, identifier: str, password: str):
 
 
 def get_user_by_id(db: Session, user_id: int):
-    """
-    Get user by ID (excluding soft-deleted users).
-    
-    Args:
-        db: Database session
-        user_id: User's ID
-        
-    Returns:
-        User object if found, None otherwise
-    """
     try:
         return (
             db.query(User)
@@ -81,20 +59,6 @@ def get_user_by_id(db: Session, user_id: int):
 
 
 def delete_user_account(db: Session, user_id: int):
-    """
-    Soft-delete user and all their associated data atomically.
-    Deletes: user account, all posts, all comments
-    
-    Args:
-        db: Database session
-        user_id: User's ID to delete
-        
-    Returns:
-        bool: True if deletion successful
-        
-    Raises:
-        HTTPException: If user not found or database error
-    """
     try:
         now = datetime.now(timezone.utc)
 
@@ -150,22 +114,7 @@ def delete_user_account(db: Session, user_id: int):
             detail="Failed to delete account"
         )
 
-
 def update_user_status(db: Session, user_id: int, status: bool):
-    """
-    Update user's active status.
-    
-    Args:
-        db: Database session
-        user_id: User's ID
-        status: New status (True=active, False=inactive)
-        
-    Returns:
-        User: Updated user object
-        
-    Raises:
-        HTTPException: If user not found or database error
-    """
     try:
         user = get_user_by_id(db, user_id)
         

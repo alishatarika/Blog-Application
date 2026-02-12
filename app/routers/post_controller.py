@@ -22,12 +22,8 @@ from typing import Optional
 from app.helper.imagefile import save_upload_file,delete_file_if_exists
 from app.models.post import Post   
 
-
-
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
-
-
 
 # ================= HOME =================
 @router.get("/read", response_class=HTMLResponse)
@@ -85,6 +81,7 @@ def create_post_action(
     
 @router.get("/post/{post_id}", response_class=HTMLResponse)
 def get_post_detail(post_id: int, request: Request, db: Session = Depends(get_db), user=Depends(get_current_user_optional)):
+    
     post = (
         db.query(Post)
         .options(joinedload(Post.comments).joinedload(Comment.user))
@@ -181,9 +178,7 @@ def add_comment(post_id: int, comment_text: str = Form(...), db: Session = Depen
     comment_data = CommentCreate(post_id=post_id, comment_text=comment_text)
     add_comment_to_post(db, comment_data, user.id)
 
-    return RedirectResponse(f"/post/{post_id}", status_code=303)
-
-
+    return RedirectResponse(f"/read", status_code=303)
 
 @router.post("/comment/{comment_id}/delete", response_class=RedirectResponse)
 def delete_comment_action(comment_id: int, db: Session = Depends(get_db), user=Depends(get_current_user)):
@@ -199,7 +194,7 @@ def delete_comment_action(comment_id: int, db: Session = Depends(get_db), user=D
 
     delete_comment(db, comment_id)
 
-    return RedirectResponse(f"/post/{post_id}", status_code=303)
+    return RedirectResponse(f"/read", status_code=303)
 
 # ================= PROFILE =================
 @router.get("/profile", response_class=HTMLResponse)

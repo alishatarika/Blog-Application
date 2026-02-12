@@ -181,16 +181,3 @@ def get_user_posts(db: Session, user_id: int):
     except SQLAlchemyError as e:
         print("DB Error fetching user posts:", e)
         raise HTTPException(status_code=500, detail="Failed to fetch user posts")
-
-
-def get_comments_for_post(db: Session, post_id: int):
-    try:
-        return (
-            db.query(Comment)
-            .filter(Comment.post_id == post_id, Comment.deleted_at.is_(None))
-            .order_by(Comment.created_at.asc())
-            .all()
-        )
-    except SQLAlchemyError as e:
-        print("DB Error fetching comments:", e)
-        raise HTTPException(status_code=500, detail="Failed to fetch comments")

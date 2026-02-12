@@ -275,7 +275,7 @@
             font-size: 15px;
             font-family: 'Poppins', sans-serif;
             resize: none;
-            margin-bottom: 12px;
+            margin-bottom: 8px;
             transition: all 0.3s;
         }
 
@@ -287,6 +287,32 @@
             outline: none;
             border-color: #3b82f6;
             background: rgba(59, 130, 246, 0.05);
+        }
+
+        .comment-input.error {
+            border-color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .comment-input.success {
+            border-color: #10b981;
+            background: rgba(16, 185, 129, 0.05);
+        }
+
+        .error-message {
+            display: block;
+            color: #ef4444;
+            font-size: 13px;
+            margin-bottom: 12px;
+            font-weight: 500;
+            min-height: 20px;
+            animation: shake 0.3s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
         }
 
         .comment-btn {
@@ -302,9 +328,14 @@
             font-family: 'Poppins', sans-serif;
         }
 
-        .comment-btn:hover {
+        .comment-btn:hover:not(:disabled) {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        .comment-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
         }
 
         .login-prompt {
@@ -633,14 +664,15 @@
             <h3 class="comments-header">💬 Comments ({{ post.comments|length }})</h3>
 
             {% if current_user %}
-            <form method="POST" action="/post/{{ post.id }}/comment" class="comment-form" id="commentForm">
+            <form method="POST" action="/post/{{ post.id }}/comment" class="comment-form" id="commentForm" novalidate>
                 <textarea 
                     name="comment_text" 
                     rows="3" 
                     class="comment-input" 
-                    placeholder="Share your thoughts..." 
-                    required
+                    id="commentInput"
+                    placeholder="Share your thoughts..."
                 ></textarea>
+                <span class="error-message" id="commentError"></span>
                 <button type="submit" class="comment-btn">💬 Add Comment</button>
             </form>
             {% else %}
@@ -711,19 +743,63 @@
 </footer>
 
 <script>
-// Comment form submission
+// Comment form validation
 const commentForm = document.getElementById('commentForm');
+const commentInput = document.getElementById('commentInput');
+const commentError = document.getElementById('commentError');
+
 if (commentForm) {
+    // Clear error when typing
+    commentInput.addEventListener('input', function() {
+        if (commentInput.classList.contains('error')) {
+            commentInput.classList.remove('error');
+            commentError.textContent = '';
+        }
+    });
+
+    // Validate on submit
     commentForm.addEventListener('submit', function(e) {
-        const textarea = this.querySelector('textarea');
-        if (textarea.value.trim() === '') {
-            e.preventDefault();
-            textarea.focus();
+        e.preventDefault();
+        
+        if (validateComment()) {
+            commentForm.submit();
+        } else {
+            commentInput.focus();
         }
     });
 }
 
-// Delete comment modal
+function validateComment() {
+    const value = commentInput.value.trim();
+    
+    if (value === '') {
+        showError(' Comment cannot be empty');
+        return false;
+    } else if (value.length < 2) {
+        showError('Comment must be at least 2 characters');
+        return false;
+    } else if (value.length > 500) {
+        showError('Comment must be less than 500 characters');
+        return false;
+    } else {
+        showSuccess();
+        return true;
+    }
+}
+
+function showError(message) {
+    commentInput.classList.add('error');
+    commentInput.classList.remove('success');
+    commentError.textContent = message;
+}
+
+function showSuccess() {
+    commentInput.classList.remove('error');
+    commentInput.classList.add('success');
+    commentError.textContent = '';
+}
+
+// Delete modal
 let deleteForm = document.getElementById('deleteForm');
 
 function confirmDeleteComment(commentId) {
@@ -735,14 +811,12 @@ function closeModal() {
     document.getElementById('deleteModal').classList.remove('active');
 }
 
-// Close modal on outside click
 document.getElementById('deleteModal').addEventListener('click', function(e) {
     if (e.target === this) {
         closeModal();
     }
 });
 
-// Close modal on Escape key
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
         closeModal();
